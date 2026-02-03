@@ -1,0 +1,1590 @@
+% -----------------------------------------------------------------
+% Vorlage fuer Ausarbeitungen von
+% Bachelor- und Masterarbeiten am ISS
+% 
+% Template for written reports or master theses at the ISS
+% 
+% For use with compilers pdflatex or latex->dvi2ps->ps2pdf.
+%
+% -----------------------------------------------------------------
+% README, STUDENT USERS:
+% We highly appreciate students using this template _AS IS_,period. 
+% The document provides adjustable document preferences, 
+% student information settings and typography definitions. Look for
+% code delimited by *** ***
+%
+% The short explanation: it's the ISS common standard and 
+% 	it's battle tested.
+% The long explanation: 
+%	We do not want you to go through the document and tweak the 
+%	package options, layout parameters and line skips here and 
+%	there and waste hours. We are providing this template such 
+%	that you can fully concentrate on filling in the much more 
+%	important _contents_ of your thesis.
+%
+% If you have serious needs on extra packages or design 
+% modifications, talk to your supervisor _before_ modifying 
+% the template.
+% Similarly, we're happy if you give your supervisor a hint on any 
+% errors in this template.
+%
+% -----------------------------------------------------------------
+% History:
+% Jan Scheuing,   04.03.2002
+% Markus Buehren, 20.12.2004
+% last changes:   10.01.2008 (removed unused packages), 
+% 		07.08.2009 (added IEEEtran_LSS.bst file)
+% 		02.05.2011 removed matriculation number from cover page
+% Martin Kreissig, 25.01.2012: all eps/ps parts removed for 
+% 				pdflatex to work properly
+% Peter Hermannstaedter, 14.08.2012: fusion of versions for 
+% 		latex/dvi/ps/pdf and pdflatex, additional comments,
+% 		unification of document flags and student options
+% Florian Liebgott, 12.03.2015: bug fixes, removal of obsolete options,
+%		switch to UTF-8
+% Florian Liebgott, 20.05.2015: fixed encoding problem on title page
+% Florian Liebgott, 24.01.2017: changed deprecated font commands (like
+%		\sl) to up-to-date commands to be compatible with
+%		current TeX distributions.
+% Felix Wiewel, 30.08.2021: Replace obsolete scrpage2 with scrlayer-scrpage
+%
+% -----------------------------------------------------------------
+% If you experience any errors caused by this template, please
+% contact Florian Liebgott (florian.liebgott@iss.uni-stuttgart.de)
+% or your supervisor so that we can fix the errors.
+% -----------------------------------------------------------------
+
+
+\documentclass[12pt,DIV=14,BCOR=12mm,a4paper,footinclude=false,headinclude,parskip=half-,twoside,openright,cleardoublepage=empty,toc=index,bibliography=totoc,listof=totoc]{scrreprt}
+% encoding needs to be defined here, otherwise umlauts on the titelpage won't work.
+\usepackage[utf8]{inputenc}
+
+% =========================
+% FAST COMPILE SWITCH
+% =========================
+\newif\iffastcompile
+\fastcompiletrue   % fast draft mode; change to \fastcompilefalse for final
+\iffastcompile
+   \PassOptionsToPackage{draft}{graphicx}
+\fi
+
+% =========================
+% FAST FIGURE SWITCH
+% =========================
+\newcommand{\FastOrFinal}[2]{%
+\iffastcompile
+  #1%
+\else
+  #2%
+\fi
+}
+
+%
+%
+% *****************************************************************
+% -------------------> document preferences here <-----------------
+% *****************************************************************
+% Uncomment the settings you like and comment the settings you don't
+% like.
+
+% Language: 
+% affects generic titles, Figure term, titlepage and bibliography
+% (Note:if you switch the language, compile tex and bib >2 times)
+\def \doclang{english} 	% For theses/reports in English
+%\def \doclang{german} 		% For theses/reports in German
+
+% Hyperref links in the document:
+\def \colortype{color} % links with colored text
+%\def \colortype{bw} 	% plain links, standard text color (e.g. for print)
+%\def \colortype{boxed} % links with colored boxes
+% *****************************************************************
+%
+%
+%
+% *****************************************************************
+% --------------> put student information here <------------------
+% *****************************************************************
+% Please fill in all items denoted by "to be defined (TBD)"
+\def \deworktitle{}        % German title/translation
+\def \enworktitle{Energy Expenditure Estimation from Biosignals Using Signal-to-Image Transformations: A Comparative Evaluation of Models and Sensor Inputs}        %English title/translation
+\def \tutor{Ms. Sarvenaz Babakhani}
+\def \student{Maung Myint Soe}
+\def \worksubject{Masterarbeit Dxxxx TBD}  % type and number (S/Dxxxx) of your thesis
+\def \startdate{01.06.2025}
+\def \submission{01.02.2026}
+\def \signagedate{TBD Date of sign.}   % Date of signature of declaration on last page
+\def \keywords{Foundation models, Signal to Image (S2I), CWT, STFT, GAF, Feature extraction, Biosignals}
+
+
+%\def \abstract{Abstract}
+\def \abstract{\textbf{\Large Abstract} \\[1em] This thesis focuses on calorie expenditure estimation from wearable bio-signals by leveraging deep learning and multimodal sensor data. Accurate measurement of energy expenditure is crucial for health monitoring, fitness optimization, and clinical application; however conventional approaches often rely on indirect assumptions or handcrafted features that limit accuracy and scalability across different subjects and activities. The work proposes an image-based learning pipeline that converts time-series physiological signals into structured image representations using multiple complementary transformations. These representations are then processed by a vision-based encoder with a lightweight regression head to predict continuous calorie expenditure. A key objective of the thesis is to study both modeling choices and signal choice in a controlled way by evaluating single-signal inputs, signal pairs, and grouped sensor configurations under a subject-independent evaluation protocol. Through this comparative analysis, the thesis clarifies which sensor configurations are most informative and how much deep learning based feature learning from image representations can improve generalization compared to classical approaches in realistic settings. }
+% *****************************************************************
+%
+
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{ifthen}
+\ifthenelse{\equal{\doclang}{english}}%{
+	%\usepackage[ngerman]{babel} %german version
+	%\def \maintitle{\deworktitle}
+	%\def \translatedtitle{\enworktitle}
+	% set , to decimal and . to thousands separator, if German language is used
+	%\DeclareMathSymbol{,}{\mathord}{letters}{"3B}
+	%\DeclareMathSymbol{.}{\mathpunct}{letters}{"3A}
+	%}
+    {
+	%english version
+	\def \maintitle{\enworktitle}
+	\def \translatedtitle{\deworktitle}
+	}
+
+\usepackage{float}
+\usepackage{txfonts} % Times-Fonts
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage[headsepline]{scrlayer-scrpage} % Headings
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{pgfmath}
+\usepackage{graphicx}
+\iffastcompile
+  \setkeys{Gin}{draft}
+\fi
+\providecommand{\cleardoublepage}{\clearpage}
+\iffastcompile
+  % no shadows in draft mode (MUCH faster)
+  \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+  \tikzset{drop shadow/.style={}} % make "drop shadow" do nothing
+\else
+  % full quality for final
+  \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, shadows, backgrounds}
+\fi
+\usepackage[format=hang]{caption}       % for hanging captions
+\usepackage{subfig}                     % for subfigures
+\usepackage{wrapfig}                    % for figures floating in text, alternatively you can use >>floatflt<<
+
+\usepackage{booktabs}                   % nice looking tables (for tables with ONLY horizontal lines)
+
+%%%%% Tikz / PGF - drawing beautiful graphics and plots in Latex
+
+% \usepackage{tikz}
+% \usetikzlibrary{plotmarks}              % larger choice of plot marks
+% \usetikzlibrary{arrows}                 % larger choice of arrow heads
+% % ... insert other libraries you need
+% \usepackage{pgfplots}
+% % set , to decimal and . to thousands separator for plots, if German language is used
+% \ifthenelse{\equal{\doclang}{german}}{
+% \pgfkeys{/pgf/number format/set decimal separator={,}}
+% \pgfkeys{/pgf/number format/set thousands separator={.}}
+% }{}
+%%%%%%
+
+\ifthenelse{\equal{\colortype}{color}}{
+	% colored text version:
+	\usepackage[colorlinks,linkcolor=blue]{hyperref}
+	\newcommand{\bugfix}{\color{white}{\texttt{\symbol{'004}}}} % Bug-Fix Umlaute in Verbatim
+}
+ {
+	\ifthenelse{\equal{\colortype}{boxed}}{
+		% colored box version:
+		%\usepackage{hyperref}
+		\newcommand{\bugfix}{\color{white}{\texttt{\symbol{'004}}}} % Bug-Fix Umlaute in Verbatim
+	}{
+		% monochrome version:
+		\usepackage[hidelinks]{hyperref}
+		\newcommand{\bugfix}{\color{white}{\texttt{\symbol{'004}}}} % Bug-Fix Umlaute in Verbatim
+	}
+ }
+
+% Layout and Headings
+\pagestyle{scrheadings}
+\automark{chapter}
+\clearpairofpagestyles
+\lehead[]{\pagemark~~\headmark}
+\rohead[]{\headmark~~\pagemark}
+\renewcommand{\chaptermark}[1]{\markboth {\normalfont\slshape \hspace{8mm}#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\normalfont\slshape \thesection~#1\hspace{8mm}}}
+\addtolength{\textheight}{15mm}
+\parindent0ex
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\renewcommand*{\pnumfont}{\normalfont\slshape} % Seitenzahl geneigt
+\renewcommand*{\sectfont}{\bfseries} % Kapitelueberschrift nicht Helvetica
+
+
+% Settings for PDF document
+\pdfstringdef \studentPDF {\student} 
+\pdfstringdef \worktitlePDF {\maintitle}
+\pdfstringdef \worksubjectPDF {\worksubject}
+\hypersetup{pdfauthor=\studentPDF, 
+            pdftitle=\worktitlePDF,
+            pdfsubject=\worksubjectPDF}
+
+% Title page
+\titlehead{
+	\includegraphics[width=20mm]{university-logo}
+	\hspace{6mm}
+	\ifthenelse{\equal{\doclang}{german}}{
+		\begin{minipage}[b]{.6\textwidth}
+		{\Large Universit\"at Stuttgart } \\
+		Institut f\"ur Signalverarbeitung und Systemtheorie\\
+		Professor Dr.-Ing. B. Yang \vspace{0pt}
+		\end{minipage}
+	}{
+		\begin{minipage}[b]{.6\textwidth}
+		{\Large University of Stuttgart } \\
+		Institute for Signal Processing and System Theory\\
+		Professor Dr.-Ing. B. Yang \vspace{0pt}
+		\end{minipage}
+	}
+	\hspace{1mm}
+	\includegraphics[width=28mm]{isslogocolor}
+}
+\subject{\worksubject\vspace*{-5mm}} % Art und Nummer der Arbeit
+\title{\maintitle}%\\ \Large{\subtitle}}
+\subtitle{\translatedtitle}
+\author{
+\large
+  \ifthenelse{\equal{\doclang}{german}}{
+  \begin{tabular}{rp{7cm}}
+    \Large 
+    Autor:      & \Large \student \vspace*{2mm}\\
+    Ausgabe:    & \startdate \\
+    Abgabe:     & \submission \vspace*{3mm}\\
+    Betreuer:   & \tutor \vspace*{2mm}\\
+    Stichworte: & \keywords
+  \end{tabular}
+  }{
+  \begin{tabular}{rp{7cm}}
+    \Large 
+    Author:             & \Large \student \vspace*{2mm}\\
+    Date of work begin: & \startdate \\
+    Date of submission: & \submission \vspace*{3mm}\\
+    Supervisor:         & \tutor \vspace*{2mm}\\
+    Keywords:           & \keywords
+  \end{tabular}
+  }
+  \bugfix
+}
+\date{}
+\publishers{\normalsize
+  \begin{minipage}[t]{.9\textwidth}
+    \abstract
+  \end{minipage}
+}
+
+\numberwithin{equation}{chapter} 
+\sloppy 
+
+%
+%
+%
+% *****************************************************************
+% --------------> put typography definitions here <----------------
+% *****************************************************************
+% colors
+\definecolor{darkblue}{rgb}{0,0,0.4}
+
+% declarations
+\newcommand{\matlab}{\textsc{Matlab}\raisebox{1ex}{\tiny{\textregistered}} }
+% Integers, natural, real and complex numbers
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+% expectation operator
+\newcommand{\E}{\operatorname{E}}
+% imaginary unit
+\newcommand{\im}{\operatorname{j}}
+% Euler's number with exponent as parameter, e.g. \e{\im\omega}
+\newcommand{\e}[1]{\operatorname{e}^{\,#1}}
+% short command for \operatorname{}
+\newcommand{\op}[1]{\operatorname{#1}}
+
+% unknown hyphenation rules
+\hyphenation{Im-puls-ant-wort Im-puls-ant-wort-ko-ef-fi-zien-ten
+Pro-gramm-aus-schnitt Mi-kro-fon-sig-nal}
+% *****************************************************************
+%
+
+\begin{document}
+\let\cleardoublepage\clearpage
+
+% title and table of contents
+\pagenumbering{alph}
+\maketitle
+\cleardoublepage
+\pagenumbering{roman} % roman numbering for table of contents
+\tableofcontents
+\cleardoublepage
+\setcounter{page}{1}
+\pagenumbering{arabic} % arabic numbering for rest of document
+
+% *****************************************************************
+% -------------------> start writing here <------------------------
+
+\chapter{Introduction}
+\section{Motivation}
+Deep learning has moved from building new models for every specific task to using large pretrained models that can be adapted to multiple problems. In language related AI tasks, this shift happened earlier: instead of training a new model from scratch for every dataset, the common approach is to start from a strong pretrained model and fine-tune it for the target task. A similar approach can be analyzed in the field of computer vision now, where pretrained models provide representations that transfer well even when the downstream dataset is smaller or the task is different from the original training objective.
+
+In the case of wearable sensing and biomedical applications, many problems are still approached in a more traditional way. For example, estimation of Calorie or energy expenditure, detecting lung cancer from CT scans, Prostate and other organ cancers from MRI, histopathology slides, and biopsy images and Alzheimer’s disease and mild cognitive impairment from brain MRI, PET, and cognitive test patterns. The goal of this research is to estimate metabolic demand from physiological signals such as heart rate, respiration-related measurements, inertial sensors, and EMG. Classical approaches typically rely on handcrafted features and regression models, while deep learning approaches often process raw time-series signals directly. The first method has been used widely for a long time to cure diseases and the second method is widely becoming popular in the medical field, but it also have limitations. Handcrafted features may miss important physiological patterns and time consuming for emergency cases, and end-to-end time-series models can be sensitive to sensor differences, windowing choices, and limited labeled data, especially when the evaluation requires generalization across unseen subjects or features.
+
+A practical direction that has gained attention, in recent years though it is still under research in biomedical signal measurement, is to convert 1D time-series data into 2D image representations so that models can learn patterns to predict the outcomes without relying on manually engineered features. One commonly used framework explicitly encodes time-series as images, including Gramian Angular Fields such as GADF, to make temporal structure learnable through computer-vision-style feature extraction \cite{wang2015imaging}.
+ In physiological signal analysis, time–frequency representations are especially common because bio medical signals are non-stationary and change over time. For example, CWT scalograms have been used as image inputs to CNNs for ECG classification \cite{wang2021automatic},
+ and STFT spectrograms have been used as inputs to CNN-based EEG seizure detection pipelines \cite{shen2024realtime}.
+ In addition, Gramian Angular Field representations have also been successfully applied to ECG classification using deep CNNs, showing that correlation-based image encodings can capture useful structure beyond pure time–frequency views \cite{elmir2023ecg_gaf}.
+ These findings motivate using a small set of complementary transformations that capture different aspects of the same physiological dynamics.
+ 
+This thesis focuses on calorie expenditure estimation of human through wearable sensing metabolic signals. Instead of feeding raw time-series directly into a machine learning model, the primary objective is to transform these temporal sequences into rich, 2-dimensional image representations. The core methodological innovation lies in synthesizing three complementary mathematical transformations into a single, unified RGB alike composite image. By treating different signal processing techniques as distinct color channels, the model captures multiple views of the same underlying physiological dynamics simultaneously. The three distinct transformations used are CWT to capture time–frequency structure, STFT to represent localized spectral content, and GADF to encode temporal relationships in a compact visual form. By stacking these three transformations as channels, each signal window becomes a standardized image that can be processed by vision models.
+
+The primary objective of the experimental framework is to leverage large vision foundation models for estimating calorie expenditure from physiological signal images. In this approach, the generated 2D images are first processed by either a CLIP image encoder or a DINOv2 image encoder to extract robust embeddings, which are then fed to a trained Multilayer Perceptron (MLP) regression head to predict metabolic output. The motivation for prioritizing these two backbones is to evaluate whether transfer learning from strong, pre trained visual representations can be effectively applied to non natural, signal derived images and to compare how a contrastive image text model (CLIP) and a self supervised vision model (DINOv2) behave on the same task. At the same time, the pipeline is designed in a modular way, where both CLIP and DINOv2 share the exact same input representation, multi view fusion strategy, training procedure, and evaluation protocol, enabling a direct comparison of their performance and allowing additional backbones to be integrated in future research phases. 
+
+Furthermore, a critical focus of this thesis is the strategic selection of physiological signals. Energy expenditure is influenced by multiple physiological and biomechanical factors, and not every sensor captures the same information. Since energy expenditure is influenced by complex physiological and biomechanical factors, different sensors capture distinct aspects of these dynamics. For this reason, the research does not rely on a fixed sensor set. Instead, it systematically compares the performance of single signals, signal pairs, and grouped sensor configurations to identify which inputs contribute most effectively and which combinations generalize best. The results are analyzed not only in terms of overall accuracy but also across activities and subjects, because performance in practical settings depends heavily on intensity changes and variability among individuals.
+
+Overall, this thesis is structured as a systematic evaluation study. It tests whether transforming biosignals into images and using a vision encoder with an MLP regressor provides competitive performance compared to classical approaches, and it clarifies how model choice and signal choice affect generalization. The goal is to test the foundation model for physiological signals and provides detail explanations on the experiments of model performance for unseen data and what can be done in the future so computer vision can be used effectively for metabolic data.
+
+
+\section{Related Works}
+Energy expenditure (EE) estimation plays a crucial role in monitoring physical activity, health management, and fitness assessment. Traditionally, EE estimation uses indirect calorimetry in controlled lab settings, which measures oxygen consumption ($VO_2$) and carbon dioxide production ($VCO_2$) to calculate metabolic energy expenditure. Even though it gives accurate value, this approach is impractical for real world deployment and long term monitoring due to equipment cost, participant burden, and the need for specialized expertise. In response to these limitations, researchers have developed wearable sensor based approaches to estimate EE in free living environments. Early work in this domain employed linear regression models trained on handcrafted features extracted from accelerometer data. For example, Staudenmayer et al. \cite{staudenmayer2015methods} developed artificial neural networks (ANNs) to estimate metabolic equivalent values (METs) from uniaxial accelerometer counts, achieving a root mean squared error (RMSE) of 1.22 METs by using statistical features (percentiles and autocorrelation) of acceleration signals. While this pioneering work demonstrated feasibility, it revealed fundamental limitations: regression equations trained on locomotion activities (walking, running) generalized poorly to lifestyle and upper body activities, and separate models were required for different activity types.
+
+
+Traditional machine learning methods, including Random Forest, Support Vector Machines (SVM), and neural networks, have been widely applied to improve EE estimation through multimodal sensor fusion. O'Driscoll et al. \cite{odriscoll2021improving} demonstrated that models utilizing accelerometer data from commercial wearables, combined with subject-specific characteristics and heart rate, could significantly outperform manufacturer estimates. This research builds directly upon two foundational studies. First, we utilize the dataset and experimental framework established by Ingraham et al \cite{ingraham2019evaluating}, "Evaluating Physiological Signal Salience for Estimating Metabolic Energy Cost from Wearable Sensors", which provided a comprehensive regression-based analysis of sensor importance. Second, we extend the methodologies introduced in previous work by Babakhani et al. \cite{babakhani2025deep} "Deep Learning for Metabolic Rate Estimation from Biosignals: A Comparative Study of Architectures and Signal Selection", which pioneered the application of deep learning architectures for energy expenditure estimation. While recent work by Olschewski et al. \cite{olschewski2025metabolic} also utilized the Ingraham et al. \cite{ingraham2019dataset} dataset to demonstrate the robustness of traditional ML approaches (SVM, Random Forest) under careful tuning, our work advances this lineage by leveraging foundation models to automate feature extraction from these complex multimodal streams.
+
+
+In recent years, deep learning approaches have shown promise for EE estimation by learning representations directly from raw sensor signals without manual feature engineering. Lopes et al. \cite{lopes2022deep} developed deep learning regression models (CNN and LSTM networks) for steady state energy expenditure prediction using multimodal wearable sensors (acceleration, gyroscope, heart rate, respiration). Their CNN model achieved RMSE of 0.36 W/kg with high correlation (R² = 0.79) to reference values, demonstrating the potential of end to end learning. More recently, Guo et al. \cite{guo2023energy} proposed an optimized multi module architecture integrating CNN, Bidirectional LSTM, and attention mechanisms for energy consumption prediction from accelerometer data alone, achieving MSE of 0.273 and R² of 0.887 on the PAMAP2 exercise dataset. These advances highlight how deep learning can automatically discover complex, non linear relationships between sensor measurements and energy expenditure across diverse activities. However, existing approaches face significant challenges in achieving robust cross subject generalization. Many studies use window level train test splits that overestimate performance by assuming data from the same subject will be seen at both training and testing time. Additionally, the relationship between sensor measurements and EE varies substantially across individuals (body composition, fitness level, movement patterns), and most models require either subject specific calibration or careful activity stratification.
+
+
+Recent advances in biomedical signal analysis have moved away from purely temporal or spectral feature extraction toward image based representations that can leverage the rich feature spaces learned by modern computer vision models. This shift is motivated by the observation that no single mathematical transformation optimally captures all aspects of non stationary physiological signals; instead, multiple complementary representations can reveal different facets of the underlying dynamics. The continuous wavelet transform (CWT) and short time Fourier transform (STFT) are the most widely adopted methods for converting 1D signals into 2D time frequency images. Song et al. \cite{song2024comparative} provide a comprehensive comparison of CWT and STFT for ECG classification, finding that CWT offers superior time frequency resolution compared to STFT for capturing transient bursts (for example, QRS complexes in ECG), while STFT spectrograms are faster to compute and more interpretable for periodic components. Kıymık et al. \cite{kiymik2005comparison} compared STFT and wavelet methods on EEG signals from children with epileptic seizures, concluding that CWT provides sufficient resolution for clinical applications while STFT is better suited for real time processing due to lower computational cost. CWT scalograms have been successfully applied to ECG arrhythmia classification using convolutional neural networks, capturing multi scale time frequency structure in a single 2D representation. STFT spectrograms have similarly been used as inputs to CNN based EEG seizure detection pipelines, where frequency bands evolve over time and reveal pathological activity. The key insight is that wavelet methods, unlike Fourier transforms, achieve adaptive time frequency resolution: high frequency resolution at low frequencies (useful for slow oscillations) and high time resolution at high frequencies (useful for detecting rapid transients common in EMG and movement).
+
+
+Complementing frequency based methods, Gramian Angular Field (GAF) transformations encode temporal correlations in a compact visual form. Elmir et al. \cite{elmir2023ecg_gaf} and Yoon et al. \cite{YoonJoo2025GAF} demonstrated that GAF representations of ECG signals, when fed to standard CNNs, achieve high classification accuracy for arrhythmia detection. Unlike CWT or STFT, which explicitly decompose frequency content, GAF captures global temporal structure by computing the arc tangent of the time delayed signal against itself, creating a 2D image where pixel intensity reflects pairwise correlations at different lags. This correlation based encoding has been shown to capture non linear and non stationary dynamics that frequency based methods alone could neglect. A key trend in recent biomedical signal analysis is the combination of multiple time frequency representations into a single multi channel image. Song et al. \cite{London2025BiomedicalSignalProcessing} proposed fusing CWT, STFT, and wavelet based Markov transition fields into a multi channel representation for simultaneous EEG and ECG classification, reporting that the multi modal approach improved classification accuracy compared to single transform baselines. The motivation is straightforward: different transforms reveal different aspects of signal dynamics (frequency content, transient structure, temporal correlations), and modern deep learning models especially vision transformers and foundation models can jointly learn which views are most informative for a given task.
+
+Pham et al. \cite{pham2021time}  introduced a time frequency time space LSTM architecture that combines complementary representations of physiological time series, demonstrating that fusion of multiple feature types (CWT based time frequency features and recurrence plot based time space features) significantly improves LSTM classification of physiological signals. This work directly supports the principle of combining multiple signal transformation methods to enhance deep learning model performance. More recent work on physiological signal classification using transfer learning with pre trained embeddings shows that high dimensional feature representations extracted from deep learning models can be effectively reused across different classification tasks. Additionally, multimodal sensor fusion using deep learning has been shown to combine information from multiple sensors into compact 2D color representations, enabling more comprehensive understanding of human activity dynamics while maintaining computational efficiency.
+
+The success of large scale foundation models and vision transformers in natural image understanding has catalyzed rapid adoption in biomedical domains. Unlike narrow task specific models, foundation models are pre trained on vast, diverse datasets and fine tuned for downstream applications, dramatically improving generalization especially in scenarios with limited labeled data. He et al. \cite{He2023TransformersMedicalImageAnalysis} provided the first comprehensive survey of transformer applications in medical image analysis, documenting successful deployments across modalities: COVID 19 diagnosis from CT and X ray images using Vision Transformers, MRI analysis for brain pathology detection, and ultrasound video classification. A key finding was that Vision Transformers, despite their lack of inductive biases like translation equivariance present in CNNs, achieved comparable or superior performance to ResNet and DenseNet baselines when combined with appropriate pre training and transfer learning strategies. Importantly, ViT's global attention mechanism proved advantageous for capturing large anatomical context, complementing local texture cues. Transferability studies have consistently shown that vision transformers exhibit superior transfer learning capabilities compared to convolutional networks when pre trained on large scale datasets and adapted to medical tasks. Analyzing transfer learning of ViT on medical imaging datasets, researchers found that pre trained transformers achieved better zero shot and few shot performance than pre trained CNNs, particularly in scenarios with small target datasets. Domain adaptive pre training where ImageNet pre trained models are continually fine tuned on medical image datasets has been shown to effectively bridge the domain gap between natural and medical images while preserving the benefits of large scale pre training.
+
+CLIP (Contrastive Language-Image Pre-training), originally introduced by Radford et al. \cite{radford2021learning} in "Learning Transferable Visual Models From Natural Language Supervision", has emerged as a powerful foundation model for medical imaging applications. Developed by OpenAI, CLIP uses contrastive learning to align image and text embeddings in a shared latent space, enabling flexible task adaptation through natural language prompts or fine-tuning on task-specific visual features. In medical imaging, Zhang et al. \cite{zhang2023knowledge} adapted CLIP for chest X-ray interpretation, where both image patches and radiology report text are jointly encoded to create aligned representations, while Talius et al. [18] demonstrated zero-shot object detection for chest X-rays. Domain-specific variants like MedCLIP (Wang et al.) \cite{Wang2022MedCLIP} and PubMedCLIP (Eslami et al.) \cite{eslami2023pubmedclip} have since been developed to handle the unique characteristics of medical images and reports, achieving superior zero-shot and few-shot performance compared to general-purpose CLIP on medical benchmarks.
+
+The multi modal nature of CLIP and its variants enables them to leverage both visual content and clinical context, addressing the heterogeneity common in medical data. Recent medical foundation models extend this paradigm further. Ma et al. \cite{ma2024segment} developed MedSAM, a segmentation oriented foundation model trained on over 1.57 million 2D medical image mask pairs across multiple modalities (CT, MRI, X ray, ultrasound, endoscopy) that demonstrates strong zero shot and few shot segmentation performance, achieving performance comparable to or exceeding specialist models trained on individual modalities.
+
+Multimodal models like M3D LaMed (Bai et al.) \cite{bai2024m3d} and LLaVA Med (Li et al.) \cite{li2023llava} combine vision encoders (often CLIP based or self supervised vision transformers) with large language models, enabling joint understanding of images and text for tasks like report generation and visual question answering on medical images. Bai et al. showed M3D LaMed specifically integrates a 3D vision encoder with LLaMA 2 for complex volumetric imaging tasks such as text guided 3D CT image segmentation and automated report generation. Li et al. demonstrated LLaVA Med, trained on 600K biomedical image text pairs from PubMed Central, shows excellent multimodal conversational capability and outperforms previous supervised state of the art on biomedical visual question answering datasets. These advanced multimodal architectures enable models to effectively synthesize visual and textual information, producing clinically relevant outputs that support radiologists and other healthcare professionals in diagnostic workflows
+
+Beyond CLIP, other foundation models have shown remarkable adaptability to biomedical tasks, particularly those leveraging self-supervised learning like DINOv2, introduced by Oquab et al. in "DINOv2: Learning Robust Visual Features without Supervision". Bouaoun et al. \cite{Baharoon2023DINOv2Radiology} evaluated DINOv2, a self-supervised vision foundation model pre-trained on 142 million curated natural images, and demonstrated strong performance across radiology benchmarks including disease classification and organ segmentation in X-ray, CT, and MRI modalities. The study conducted over 200 experiments across diverse imaging modalities to measure the effectiveness of DINOv2's feature representations in different evaluation settings such as few-shot learning, linear probing, and end-to-end fine-tuning. Scholz et al. \cite{scholz2025mmdinov2} extended this paradigm by introducing MM-DINOv2, which adapts DINOv2 for multi-modal medical imaging through novel multi-modal patch embeddings and full modality masking strategies. Their approach successfully addresses missing modalities, a frequent challenge in clinical practice, and achieved superior performance in glioma subtype classification from multi-sequence brain MRI.
+
+The effectiveness of DINOv2 across diverse medical imaging tasks underscores the generalize ability of large scale self supervised vision models. These advances highlight the power of foundation models in medical imaging: they capture broad, generalizable visual patterns from diverse data and remain effective when labeled training data for specific tasks is scarce. Foundation models are particularly valuable in biomedical applications because labeled medical data, especially for rare conditions or novel diagnostic tasks, remains scarce and expensive to acquire. Pre training on large unlabeled datasets (or weakly labeled data like radiology reports) learns general representations that transfer effectively to downstream tasks with minimal fine tuning. Müller Franzes et al. \cite{muller2025medical} demonstrated that extending 2D self supervised models like DINOv2 to 3D medical imaging while maintaining explainability can improve diagnosis and prognosis. These findings show that both CLIP and DINOv2 are powerful foundation models that can work well together for medical imaging tasks, each bringing different strengths to the analysis of physiological signals converted to images.
+
+Self supervised and contrastive learning approaches have further advanced foundation models for biomedical applications. Contrastive learning from 100 million medical images across multiple modalities (radiography, CT, MR imaging, ultrasonography) shows that large scale self supervised pre training can produce representations that outperform supervised ImageNet pre training when fine tuned for downstream medical tasks \cite{Ghesu2022Contrastive100M}. Self supervised contrastive learning for medical time series data (EEG, ECG, ICU readings) has demonstrated that pre training on unlabeled data and fine tuning with small labeled datasets is more effective than traditional supervised approaches, particularly in scenarios with 5 percent or less labeled data \cite{Liu2023SSCL_MedTimeSeries_Review}. Recent attention mechanisms for physiological signal deep learning have shown that channel attention mechanisms are particularly effective for regression tasks (for example, predicting cardiac output), while spatial attention excels in classification tasks (for example, hypotension prediction) . The complementary nature of convolutional operations and attention mechanisms has been verified experimentally, showing faster convergence and superior performance compared to stand alone self attention models \cite{park2022attention}.
+
+Deep multimodal data fusion has emerged as a critical strategy for comprehensive health monitoring from wearable devices. In this context, multimodal refers to the integration of data from multiple different sensors or physiological signals (such as accelerometry, heart rate, EMG, and respiration) to improve the accuracy and robustness of health predictions. Bahador et al. \cite{bahador2021deep} proposed a data fusion technique that transforms multimodal sensor data into compact 2D color representations capturing covariance distributions across modalities, demonstrating efficient discrimination of different activity types while preserving computational efficiency. This approach directly parallels the multi channel image strategy employed in the current thesis, where multiple physiological signals are combined into single RGB like images for processing by foundation models.
+
+However, recent research also demonstrates that individual strong signals can be analyzed effectively in isolation. Wang et al. \cite{wang2024multimodal} showed that multimodal models (combining multiple signals) outperform uni-modal models (single signal analysis) in clinical risk prediction tasks, yet the contribution analysis revealed that individual temporal signals often provide substantial predictive value on their own. Additionally, Xiang et al. \cite{xiang2025multi} found that parallel deep learning branches can process individual physiological signals (such as heart rate or EMG alone) in separate time and frequency domains, with later feature concatenation achieving superior performance compared to using any single domain representation alone.
+
+The thesis explores both approaches: (1) combining multiple signals into fused image representations for comprehensive analysis, and (2) processing individual strong signals like heart rate and EMG as standalone modalities through foundation models. These findings collectively support the use of both multi modal deep learning architectures and specialized single modality processing for physiological signal analysis, where complementary signal representations can be fused or analyzed independently to create rich, informative features for downstream prediction tasks like energy expenditure estimation.
+Our work synthesizes insights from three research streams: time frequency transforms for biomedical signal analysis, foundation models for medical imaging, and wearable sensor based energy expenditure estimation. The novel methodological contribution is to encode multi sensor physiological data (accelerometry, EMG, respiration, heart rate) from the Ingraham et al. \cite{ingraham2019dataset} dataset as RGB like composite images using complementary transforms (CWT, STFT, GADF), then apply pre trained vision foundation models (CLIP and DINOv2) with task specific regression heads to predict metabolic energy expenditure. 
+
+Our work explores both multimodal approaches (combined multi sensor images) and single modal approaches (individual signals like heart rate and EMG alone), with CLIP and DINOv2 trained separately on the same input representations to enable direct comparison. This approach is motivated by the observation that no single signal transformation optimally captures all physiological dynamics, for example, CWT excels at transient detection, STFT at periodic components, and GADF at global temporal structure and combining all three allows the vision encoders to learn which aspects are most predictive. While foundation models have revolutionized medical imaging, their application to engineered physiological images remains under explored, and our work tests whether CLIP and DINOv2 can adapt to signal derived images through fine tuning. Robust cross subject generalization through Leave One Subject Out (LOSO) evaluation is essential for practical wearable systems, unlike prior work that uses window level splits. Activity aware residual learning decomposes prediction into an activity level baseline plus a residual, allowing the models to focus on individual specific variation. The Ingraham et al. \cite{ingraham2019evaluating} dataset, which contains multiple sensor streams, diverse physical activities, and ground truth metabolic measurements from ten healthy subjects, provides an ideal testbed for evaluating how model choice (CLIP versus DINOv2), sensor choice (multimodal versus individual signals), and fusion strategy jointly affect generalization. 
+
+\chapter{Background and Methadology}
+\section{Transformations}
+\subsection{Time Frequency Transforms for Biomedical Signal Analysis}
+
+Converting one dimensional time series physiological signals into two dimensional images enables the use of powerful computer vision models and deep learning architectures designed for natural images. To achieve the best possible feature extraction from 1D signals, in this project three complementary time-frequency transforms have been employed that capture different aspects of signal dynamics. The three transformations are CWT, STFT and GAF and the reason behind choosing such signals have been explained in section one with supportive papers from previous researches.\\
+
+\textbf{Continuous Wavelet Transform (CWT)}
+
+The Continuous Wavelet Transform (CWT) decomposes a signal into time-frequency components by convolving the signal with scaled and shifted versions of a mother wavelet. Unlike the Fourier transform, which assumes signals are stationary, the CWT is particularly effective at detecting non-stationary features and transient events that are common in physiological signals like electromyography (EMG) and acceleration data.
+
+The equation of CWT is defined as (Torrence and Compo, 1998) \cite{torrence1998practical}: 
+\begin{align}
+	W(a,b) = \frac{1}{\sqrt{a}} \int x(t) \psi\left(\frac{t-b}{a}\right) dt
+\end{align}
+
+where $x(t)$ is the input signal, $\psi$ is the mother wavelet, $a$ is the scale parameter and $b$ is the time translation parameter. The scale parameter controls the trade off between time and frequency resolution such as smaller scales capture high frequency transients with good time localization, while larger scales capture low frequency components with better frequency resolution.
+
+For physiological signals, this adaptive resolution is crucial. In EMG signals, for example, the CWT excels at detecting rapid muscle activation bursts that occur at specific moments in time, while also capturing slower baseline variations. In acceleration data during walking or running, the CWT accurately identifies the precise timing events which occur at specific transient peaks in the acceleration profile. The wavelet scalogram produced by the CWT is a time-frequency image where horizontal axis represents time, vertical axis represents frequency (scale), and color intensity represents the magnitude of wavelet coefficients. This natural 2D representation makes the CWT output directly suitable for feeding into convolutional neural networks or computer vision models.\\
+
+\textbf{Short-Time Fourier Transform (STFT)}
+
+The Short-Time Fourier Transform (STFT) provides a time frequency analysis by applying the Fourier transform to short overlapping windows of the signal. This approach maintains the classic frequency resolution advantages of the Fourier transform while adding temporal localization through windowing. 
+
+The equation of STFT is defined as : 
+\begin{align}
+	\mathrm{STFT}(t,f) = \int x(\tau) w(\tau-t) \exp(-\im 2\pi f\tau) d\tau \label{eq:stft}
+\end{align}
+
+where x($\tau$) is the input signal, w($\tau$) is a window function (typically Hamming or Hann window) centered at time t, and f is the frequency variable. The choice of window length determines the time-frequency trade off such as shorter windows give better time resolution but poorer frequency resolution, while longer windows provide better frequency resolution at the expense of temporal precision \cite{song2024comparative}.
+
+The STFT is particularly effective for signals with periodic or quasi-periodic components. In heart rate variability data and respiration signals, the STFT effectively captures frequency bands that reflect different physiological states and autonomic nervous system activity (Billman, 2011) \cite{Billman2011HRVHistorical}. In acceleration data, the STFT is excellent for identifying the dominant frequency of movement (for example, the stride frequency during walking or running, which directly relates to activity intensity) \cite{kiymik2005comparison}. The STFT produces a spectrogram, which is a time-frequency representation where brightness or color indicates the power of each frequency at each time point. This spectrogram forms a natural 2D image suitable for neural network processing.\\
+
+\textbf{Gramian Angulae Field (GAF)}
+
+The Gramian Angular Field (GAF) takes a different approach by encoding temporal correlations rather than frequency information (Wang and Oates, 2015) \cite{wang2015imaging}. Instead of decomposing the signal into frequency components, GAF captures the global temporal structure and pairwise relationships between different time points in the signal. The GAF is computed in two main steps as explained below.
+
+First, the signal is normalized to the range (minus 1, plus 1) to preserve the temporal order and relative magnitudes:
+\begin{align}
+	\bar{x}(t) = \frac{2 \cdot (x(t) - \min(x))}{\max(x) - \min(x)} - 1 \label{eq:normalization}
+\end{align}
+
+Second, the normalized signal is converted to polar coordinates, where the arctan relationship between the signal value and time index creates angular positions:
+
+\begin{align}
+	\varphi(t) = \arctan\left(\frac{\bar{x}(t)}{t}\right) \label{eq:phase}
+\end{align}
+
+Finally, the Gramian Angular Field matrix is computed as the cosine of the angle differences between all pairs of time points:
+
+\begin{align}
+	\text{GAF}(i,j) = \cos(\varphi(i) + \varphi(j)) \label{eq:gaf}
+\end{align}
+
+This produces a 2D image where pixel intensity at position $(i,j)$ reflects the temporal correlation between signal values at times $i$ and $j$. High correlation between distant time points appears as bright pixels, while low correlation appears as dark pixels (Wang and Oates, 2015). For physiological signals, GAF effectively captures repeating patterns and cyclic behaviors. For instance, in EMG signals, the GAF reveals the repetitive muscle activation patterns that occur during cyclic activities like walking or running \cite{YoonJoo2025GAF}. In acceleration data, the GAF highlights the periodic structure of gait cycles, where similar acceleration patterns repeat with each step (Elmir et al., 2023) \cite{elmir2023ecg_gaf}. 
+
+\subsection{Rationale for Using Three Complementary Transforms}
+No single time-frequency representation captures all aspects of physiological signal dynamics. The three transforms we employ each excel at different aspects:
+
+\begin{itemize}
+\item CWT excels at detecting transient events and rapid changes, with adaptive time-frequency resolution that prioritizes time precision for high-frequency features \cite{kiymik2005comparison}
+
+\item STFT excels at identifying periodic and quasi-periodic components with consistent frequency resolution across the spectrum (Song et al., 2024)\cite{song2024comparative}
+
+\item GAF excels at capturing global temporal structure and correlation patterns that reflect the overall behavior and repeatability of the signal\cite{wang2015imaging}.
+\end{itemize}
+
+By combining all three transforms into a multi-channel image representation, we allow the deep learning model to learn which aspects of the signal are most relevant for predicting energy expenditure \cite{pham2021time}.
+
+\section{Foundation Models for Physiological Signal Analysis}
+
+Foundation models are large scale neural networks pre trained on massive amounts of data in an unsupervised or self supervised manner. These models learn general purpose visual representations that can be effectively adapted to diverse downstream tasks with minimal additional training data. Unlike traditional deep learning approaches that require task specific training from scratch, foundation models leverage knowledge learned from billions of images to provide powerful feature extraction capabilities. In this work, we explore two complementary foundation models: CLIP and DINOv2, both of which have demonstrated remarkable transfer learning capabilities in medical imaging and biomedical signal analysis.
+
+\subsection{Contrastive Language Image Pre training (CLIP)}
+CLIP is a foundation model developed by OpenAI that learns visual representations by aligning image and text embeddings in a shared latent space (Radford et al., 2021) \cite{radford2021learning}. Unlike traditional supervised learning where images are paired with discrete class labels, CLIP leverages natural language descriptions as supervision signals. This enables CLIP to learn more nuanced and semantically rich representations that capture both visual content and semantic meaning.
+
+CLIP consists of two parallel encoders: an image encoder and a text encoder. The image encoder is typically a Vision Transformer (ViT) or ResNet based architecture that processes input images and produces high dimensional embedding vectors. The text encoder is a transformer based language model (similar to BERT) that processes text descriptions and produces corresponding text embeddings. During pre training, CLIP is trained on image text pairs using contrastive learning, where matched image text pairs are pulled closer together in the embedding space, while unmatched pairs are pushed apart. 
+CLIP was pre trained on 400 million image text pairs collected from the internet. This massive and diverse dataset enables CLIP to learn robust visual features that generalize well across different domains, lighting conditions, object scales, and image qualities. The pre trained CLIP model demonstrates remarkable zero shot capabilities, where it can classify images into novel categories without any task specific training, simply by using natural language descriptions of the target classes \cite{radford2021learning}.\\
+
+\textbf{Suitability for Physiological Signal Images}
+
+Although CLIP was trained on natural images, it is suitable for encoding engineered physiological signal images (CWT scalograms, STFT spectrograms, GAF matrices) for several reasons:
+\begin{itemize}
+\item Universal visual features: The low level features learned by CLIP (edge detection, texture analysis, local spatial patterns) are domain agnostic and apply to any 2D image, including signal derived images \cite{zhang2023knowledge}.
+\item Transfer learning capability: CLIP's pre trained weights provide a strong initialization that captures fundamental image understanding, reducing the data and computation required to adapt to physiological signal images (Zhao et al., 2024)\cite{zhang2023knowledge}.
+\item Robustness: Previously training on large scale image collections makes CLIP robust to variations and noise, which is important when dealing with physiological signals that may contain measurement artifacts \cite{radford2021learning}.
+\end{itemize}
+
+\subsection{Self Supervised Vision Foundation Model (DINOv2)}
+Meta AI has built DINOv2, a new method for training high-performance computer vision models [41]. DINOv2 (Oquab et al., 2023) \cite{oquab2023dino} is a self supervised vision foundation model pre trained on 142 million curated natural images without using any labels or text descriptions. Because it uses self-supervision, DINOv2 can learn from any collection of images. It can also learn features, such as depth estimation. Like with other self-supervised systems, models using the DINOv2 method can be trained on any collection of images, without needing any associated metadata. We can think of it as being able to learn from all the images it’s given, rather than only those that contain a specific set of hashtags or alt text, or caption \cite{meta2023dinov2}. Unlike CLIP which learns from image text pairs, DINOv2 uses a self supervised contrastive learning approach called DINO (Caron et al., 2021) \cite{caron2021emerging}, which learns representations by comparing multiple augmented views of the same image.
+
+DINOv2 is built on a Vision Transformer (ViT) architecture that processes images by dividing them into fixed size patches and learning transformations on these patches (Dosovitskijii et al., 2021)\cite{dosovitskiy2021image}. The self supervised learning approach uses a student teacher framework where the student network learns to predict the output of a teacher network, and both networks process different augmented views of the same image. This encourages the network to learn features that are invariant to image augmentations (crops, color jittering, blurring) while remaining discriminative across different images. The self supervised pre training approach does not require human annotations, making it practical to scale to very large datasets. The resulting model learns rich visual representations that capture semantic information without explicit supervision, allowing DINOv2 to perform well on diverse downstream tasks including image classification, object detection, and segmentation \cite{oquab2023dino}.
+
+\chapter{Methods and Approach}
+\section{Datasets}
+
+In this project, we use the dataset of Ingraham et al. \cite{ingraham2019dataset}, a comprehensive wearable sensor dataset specifically designed for energy expenditure estimation. As mentioned in the paper, the dataset was collectecd from multiple healthy participants performing different physical activities in a controlled laboratory setting while simultaneous grund truth metabolic measurements were recorded using indirect calorimetry.
+
+Ten different subjects of diverse physical characteristics were observed in the study. The activites are performed in a single laboratory session to ensure controlled conditions consistent measurement protocols. No specific gender, age or weight level restrictions were there in order to create a representative sample of the general population. Subjects performed six distinct phusical activities which are walking, incline walking, backward walking, running, cycling, stair climbing. While performing these activities, the steady-state energy expenditure data were collected after a few minutes so the subjects respiratory response are stable. Which ensurse that the measured metabolic cost reflects the actual energetic demand of each activity.
+The Ingraham et al. \cite{ingraham2019evaluating} dataset includes multiple physiological sensor streams with varying sampling frequencies, which are mentioned in Table \ref{tab:sensor_specs}.
+
+
+
+\begin{table}[ht]
+\centering
+\caption{Specifications of the wearable sensors utilized in the Ingraham et al. dataset \cite{ingraham2019evaluating}, categorizing each signal by sampling rate and physiological purpose.}
+\label{tab:sensor_specs}
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Sensor Modality} & \textbf{Sampling Rate} & \textbf{Purpose} \\
+\hline
+APDM Acceleration & 128 & Local motion capture \\
+Empatica Acceleration  & 32 & Wrist motion capture \\
+Empatica Physio  & 4 & Electrodermal activity \\
+EMG & 1000 & Lower limb muscle activation patterns \\
+Metabolics (VO$_2$/VCO$_2$)  & Breath by breath & Ground truth energy expenditure \\
+\hline
+\end{tabular}
+\end{table}
+
+We utilize the open dataset established by Ingraham et al. \cite{ingraham2019dataset}, which provides the simultaneous multi-sensor data necessary for our S2I strategy. As illustrated in Figure\ref{fig:body_sensors}, the experimental setup captures distinct physiological dynamics: local mechanical signals (accelerometry, EMG) that respond instantaneously to motion, and global systemic signals (heart rate, respiration) that exhibit time-delayed adaptations to load. This diversity directly motivates our two experimental frameworks: the Multimodal approach, which groups complementary sensors to capture holistic physiological states, and the Single-Signal approach, which isolates specific modalities to identify individual predictive markers.
+
+Figure\ref{fig:body_sensors} shows sensor placement and experimental setup used in the Ingraham et al. dataset. Subjects wore a portable metabolic mask (Cosmed K4b2) for ground truth measurement, alongside IMUs, EMG sensors, and physiological wristbands (Ingraham et al., 2019)\cite{ingraham2019evaluating}.\\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{image.png}
+    \caption{Oxygen consumption ( $VO2$ ), carbon dioxide production ($VCO2$ ), breath frequency, and minute ventilation were measured breath-by-breath using a portable respirometer. Heart rate (HR) was measured using a wireless heart rate monitor strapped around the chest. Surface electromyography (EMG) electrodes recorded bilateral muscle activity from 8 lower limb muscles: gluteus maximus (GMAX), biceps femoris (BF), semitendinosis (ST), rectus femoris (RF), vastus lateralis (VL), medial gastrocnemius (MGAS), soleus (SOL), and tibialis anterior (TA). Electrodermal activity (EDA), skin temperature, and accelerations of the wrist were recorded using bilateral wrist sensors. Inertial measurement units (IMUs) placed on the chest, left hip, and ankles measured 3-axis limb accelerations. Blood oxygen saturation ($SpO2$) was measured by a pulse oximeter secured to the subject’s left earlobe}
+    \label{fig:body_sensors}
+\end{figure}
+
+Ground truth energy expenditure is derived from breath-by-breath oxygen consumption (VO2) and carbon dioxide production (VCO2) using indirect calorimetry, providing gold-standard metabolic cost measurements. Across all subjects, activities such as walking and running were performed at varying speeds and resistance levels to create a wide spectrum of energy expenditure demands, providing an ideal foundation for evaluating both fusion and isolation strategies.
+
+\section{Image Processing }
+\subsection{Multimodal Image Processing}
+The main scope of the multiview strategy is to decompose the complex physiological signal space into four complementary information streams, each capturing different aspects of the body's response to physical activity. Rather than attempting to fuse all heterogeneous signals into a single monolithic input, the pipeline generates four separate image files for each temporal window. It is necessary to highlight that each image represents a strategically grouped set of signals based on their physiological source and measurement location (Ingraham et al., 2019)\cite{ingraham2019evaluating}. Specifically, the architecture constructs the following distinct inputs: Sensor Group 1 focuses on core and muscle activity by capturing central body mechanics via waist accelerometry and muscle load via electromyography; Sensor Group 2 isolates the lower limb to capture biomechanical gait patterns using aggregated leg accelerometry; Sensor Group 3 addresses wrist physiology by combining wrist motion with autonomic stress signals derived from electrodermal activity; and Sensor Group 4 accounts for the systemic metabolic response by capturing global physiological load using heart rate, ventilation, and breathing frequency. This decomposition follows the rationale that different sensor groups provide distinct types of information ranging from instantaneous mechanical effort to systemic physiological load (Nobrega et al., 2014)\cite{nobrega2014neural}.
+
+Furthermore, to overcome the challenge of processing fast mechanical signals alongside slow metabolic signals, the architecture applies different temporal context lengths to different signal types. While mechanical sensors utilize a standard 5-second window to capture instantaneous effort, metabolic sensors utilize an extended 360-second context to account for slow response dynamics. Within each of the four separate images described above, a specific RGB channel encoding strategy is employed to maximize feature extraction. The 1D sensor signals are converted into 2D image formats by mapping three complementary mathematical transformations to the distinct color channels: the Continuous Wavelet Transform is mapped to the Red channel, the Short-Time Fourier Transform is mapped to the Green channel, and the Gramian Angular Difference Field is mapped to the Blue channel,. This "three-transformer" approach allows the foundation model to potentially combine information across multiple mathematical perspectives within each view, while simultaneously learning which physiological sensor group drives energy expenditure.\\
+
+\textbf{Temporal Windowing Strategy}\\
+The temporal windowing approach differs strategically between mechanical sensors and metabolic sensors to account for the fundamentally different response dynamics and frequency characteristics of these physiological systems. The pipeline operates on a primary 5 second timeline with consistent temporal coverage across each subject's data. Specifically, we extract 5 second windows with 2.5 second stride (50\% overlap) so that consecutive windows overlap by half their duration. This 50\% overlap ensures smooth temporal coverage without gaps and allows the model to see subtle transitions between physiological states that might occur near window boundaries. For each window, we record four critical timing parameters: window start time, window end time, window center time, and cumulative window index. These timing records are essential for proper Leave One Subject Out (LOSO) evaluation and ensure no data leakage between training and test sets.
+
+The selection of 5 seconds as the primary window length is motivated by multiple physiological considerations. First, mechanical signals (EMG and accelerometry) exhibit high frequency content (up to 1000 Hz for EMG and 128 Hz for acceleration) that requires adequate sampling to capture transient dynamics. A 5 second window at 1000 Hz sampling provides 5000 samples, which is sufficient for time frequency analysis of high frequency transients. Second, at the motor control level, movement patterns and muscle activation patterns exhibit dynamics occurring over hundreds of milliseconds to a few seconds. The 5 second window captures complete gait cycles during walking (typically 1 to 1.2 seconds per cycle) and running (0.5 to 0.8 seconds per cycle), allowing the model to recognize periodic locomotor patterns. Third, biomechanical research has shown that reliable feature extraction from acceleration and EMG requires window lengths of 3 to 10 seconds to capture sufficient motor variability (Ingraham et al., 2019) \cite{ingraham2019evaluating}.
+
+In contrast, metabolic measurements (heart rate, breath frequency, minute ventilation) respond slowly to changes in activity intensity. To capture stable metabolic responses that reflect the integrated systemic adaptation to activity conditions, the metabolic image uses an extended context window of 360 seconds (with  stride 50 percent) rather than just the 5-second primary window. This extended window strategy captures the integrated systemic response to the activity condition, providing a more stable and informative signal than a single 5-second snapshot. The 360 second context captures how the cardiovascular and respiratory systems are responding to sustained activity, which better represents metabolic load than instantaneous measurements would. Research on the temporal dynamics of cardiovascular adaptation to exercise indicates that a 3 to 6 minute steady state bout is needed for full hemodynamic stabilization (Ozaki et al., 2010)\cite{ozaki2010metabolic}, and using context from the immediately surrounding activity provides a window into this adaptation process.
+
+\textbf{Signal Grouping Rationale and Sensor Group Definitions}\\
+The four sensor groups (which will be termed as full-body signals in this paper) are defined by physiological and anatomical criteria, clustering signals that share similar response characteristics and measurement locations. This grouping strategy reflects the hierarchical organization of human physiology: local mechanical effort (muscles and trunk), limb specific biomechanics (legs), upper body engagement (wrists and skin conductance), and systemic physiological load (heart, lungs, overall ventilation) (Nobrega et al., 2014) \cite{nobrega2014neural}. "Figure \ref{fig:multimodal_4view_pipeline} illustrates the Multimodal Architecture used to operationalize this physiological hierarchy. This framework transforms clustered sensor data into four parallel image inputs, employing distinct fusion strategies to preserve the biomechanical and physiological relationships detailed below."
+
+
+
+\FastOrFinal{
+% ---------------- DRAFT / FAST VERSION ----------------
+\begin{figure}[p]
+  \centering
+  \fbox{\parbox{0.9\textwidth}{\centering
+  Draft mode: Multimodal pipeline figure omitted to avoid Overleaf timeout.}}
+  \caption[The Multimodal View Generation Architecture]{\textbf{The Multimodal View Generation Architecture.}
+  This pipeline aggregates raw sensor data into four semantically distinct image representations (Views).}
+  \label{fig:multimodal_4view_pipeline}
+\end{figure}
+}
+{
+\definecolor{sourceColor}{RGB}{230, 240, 255}   % Blue
+\definecolor{descColor}{RGB}{235, 250, 235}     % Green
+\definecolor{imgPlaceColor}{RGB}{255, 255, 255} % White
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{% Resize to fit page width
+    \begin{tikzpicture}[
+        node distance=0.4cm,
+        font=\sffamily\scriptsize,
+        >=Stealth,
+        % --- STYLES (MATCHING PREVIOUS GRAPH) ---
+        source/.style={
+            rectangle, 
+            draw=blue!50!black, 
+            thick, 
+            fill=blue!5, 
+            minimum width=2.2cm, 
+            minimum height=0.8cm, 
+            align=center, 
+            drop shadow,
+            rounded corners=3pt,
+            font=\bfseries\footnotesize
+        },
+        view_node/.style={
+            rectangle, 
+            draw=green!40!black, 
+            thick, 
+            fill=green!5, 
+            minimum width=3.2cm, 
+            minimum height=0.8cm, 
+            align=center, 
+            drop shadow,
+            font=\scriptsize
+        },
+        img_placeholder/.style={
+            rectangle, 
+            draw=red!50!black, 
+            dashed, 
+            fill=white, 
+            minimum size=1.6cm,
+            align=center
+        },
+        arrow/.style={->, thick, color=gray!80!black}
+    ]
+
+        % ==========================================================
+        % 1. LEFT COLUMN: HARDWARE SOURCES
+        % ==========================================================
+        \node[source] (src_core) {Waist Accel\\\& EMG Sensors};
+        
+        \node[source, below=1.8cm of src_core] (src_leg) {Leg IMU\\(Accelerometry)};
+        
+        \node[source, below=1.8cm of src_leg] (src_wrist) {Empatica E4\\(Wrist Accel + EDA)};
+        
+        \node[source, below=1.8cm of src_wrist] (src_meta) {Metabolic Mask\\(HR, VE, BF)};
+
+        % ==========================================================
+        % 2. MIDDLE COLUMN: VIEW GENERATION STRATEGY
+        % ==========================================================
+        
+        % --- View 1: Core ---
+        \node[view_node, right=2.0cm of src_core] (v1) {\textbf{Image 1: Core \& Muscle}\\(5s Window)\\Red/Blue: Accel | Green: EMG};
+
+        % --- View 2: Legs ---
+        \node[view_node, right=2.0cm of src_leg] (v2) {\textbf{Image 2: Locomotion}\\(5s Window)\\All Channels: Leg Accel};
+
+        % --- View 3: Wrist ---
+        \node[view_node, right=2.0cm of src_wrist] (v3) {\textbf{Image 3: Wrist Physio}\\(5s Window)\\Red/Blue: Accel | Green: EDA};
+
+        % --- View 4: Metabolics ---
+        \node[view_node, right=2.0cm of src_meta] (v4) {\textbf{Image 4: Global Metab}\\(360s Context)\\Trends of HR, VE, BF};
+
+        % ==========================================================
+        % 3. RIGHT COLUMN: IMAGE PLACEHOLDERS (INSERT IMAGES HERE)
+        % ==========================================================
+        
+        \node[img_placeholder, right=2.0cm of v1] (img_1)
+             {\includegraphics[width=1.6cm]{Sensor Group 1/Subject01_Incline_win00000_view1.png}};
+        
+        % --- INSERT YOUR IMAGE FILE HERE (View 2) ---
+        \node[img_placeholder, right=2.0cm of v2] (img_2)
+             {\includegraphics[width=1.6cm]{Sensor2/Subject01_Incline_win00103_view2.png}};
+        
+        \node[img_placeholder, right=2.0cm of v3] (img_3) 
+             {\includegraphics[width=1.6cm]{Sensor Group 3/Subject01_walking_win00083_view3.png}};
+             
+        \node[img_placeholder, right=2.0cm of v4] (img_4) 
+             {\includegraphics[width=1.6cm]{Sensor Group 4/Subject01_Cycling_win00604_view4.png}};
+
+        % ==========================================================
+        % 4. CONNECTIONS
+        % ==========================================================
+
+        % Source -> View
+        \draw[arrow] (src_core) -- (v1);
+        \draw[arrow] (src_leg) -- (v2);
+        \draw[arrow] (src_wrist) -- (v3);
+        \draw[arrow] (src_meta) -- (v4);
+
+        % View -> Image
+        \draw[arrow] (v1) -- (img_1);
+        \draw[arrow] (v2) -- (img_2);
+        \draw[arrow] (v3) -- (img_3);
+        \draw[arrow] (v4) -- (img_4);
+
+        % ==========================================================
+        % 5. HEADERS
+        % ==========================================================
+        \node[above=0.2cm of src_core, font=\bfseries, color=blue!40!black] {Hardware};
+        \node[above=0.2cm of v1, font=\bfseries, color=green!40!black] {Signal \& Context};
+        \node[above=0.2cm of img_1, font=\bfseries, color=red!40!black] {Generated RGB Image};
+
+        % Vertical processing text
+        \node[align=center, font=\tiny\itshape, color=gray, rotate=90] at ($(v4)!0.5!(img_4)$) {Channel Fusion $\to$ RGB Representation};
+
+    \end{tikzpicture}
+    } % End resizebox
+    
+    \caption{\textbf{The Multimodal View Generation Architecture.} This pipeline aggregates raw sensor data into four semantically distinct image representations (Views). This strategy fuses different modalities into the RGB channels of a single image to capture correlations. \textbf{Image 1 (Core)} combines Waist Acceleration (Red/Blue) with EMG (Green) to link movement to muscle activation. \textbf{Image 2 (Locomotion)} focuses purely on gait dynamics. \textbf{Image 3 (Wrist)} fuses Wrist Acceleration (Red/Blue) with EDA (Green) to correlate limb intensity with autonomic stress. \textbf{Image 4 (Global Metab)} encodes long-term trends (360s) of systemic signals. This structure allows the foundation model to process complementary physiological perspectives simultaneously.}
+    \label{fig:multimodal_4view_pipeline}
+    
+\end{figure}
+}
+
+\newpage
+\textbf{Sensor Group 1}: Local Motor Control (Core\_Accel\_EMG) captures the instantaneous effort of the central body and lower limb muscles during  5-second window. This group combines two complementary signals. The APDM waist acceleration is raw 3 axis acceleration data sampled at 128 Hz, which we process by computing magnitude as the square root of the sum of squared components from each axis as below 
+
+\begin{align}
+	\text{mag}(t) = x(t)^2 + y(t)^2 + z(t)^2 \label{eq:magnitude}
+\end{align}
+
+The waist is an excellent central reference point for overall body motion intensity because it represents the position where most of the body's mass is concentrated and reflects integrated trunk motion (Ingraham et al., 2019)\cite{ingraham2019evaluating}. Simultaneously, EMG signals from bilateral lower limb muscles (gluteus maximus, hamstrings, quadriceps, and gastrocnemius) are sampled at 1000 Hz. EMG processing involves full wave rectification to extract the signal envelope, then low pass filtering at 5 Hz cutoff to obtain the linear envelope representing muscle activation intensity, and finally channel averaging across all eight bilateral muscle channels to produce: 
+
+\begin{align}
+	\text{EMG}_\text{avg}(t) = \frac{1}{8} \sum_{i=1}^{8} \text{rect}(t)_i \label{eq:emgavg}
+\end{align}
+
+These two signals are included together because both respond rapidly (within milliseconds to seconds) to changes in activity intensity, capture local mechanical effort, and exhibit complementary information (Nobrega et al., 2014) \cite{nobrega2014neural} such as waist acceleration shows the resulting motion amplitude and pattern, while EMG shows the muscular effort driving that motion. For instance, during fast walking, both waist acceleration magnitude and EMG activation levels increase substantially, whereas during slow walking, both decrease. Subtle biomechanical differences such as power walking with vigorous arm swing versus casual walking can be distinguished by analyzing the combined patterns of these signals. Some of the samples of the signal processing is shown in the Figure \ref{fig:sensor_group_1}.
+
+
+\begin{figure}[ht]
+    \centering
+    \pgfmathsetmacro{\nimages}{6}
+    \pgfmathsetmacro{\nrows}{1}
+    \pgfmathsetmacro{\imgwidth}{0.12}
+    \pgfmathsetmacro{\spacing}{0.15}
+    \begin{tikzpicture}
+        
+        
+        % Iterate through the specific filenames. 
+        % count=\i allows us to keep your grid coordinate logic.
+        \foreach \imgname [count=\i] in {
+            Sensor Group 1/Subject01_Incline_win00000_view1.png,
+            Sensor Group 1/Subject01_Incline_win00001_view1.png,
+            Sensor Group 1/Subject01_Incline_win00002_view1.png,
+            Sensor Group 1/Subject01_Incline_win00004_view1.png,
+            Sensor Group 1/Subject01_Incline_win00005_view1.png,
+            Sensor Group 1/Subject01_Incline_win00006_view1.png   
+        } 
+         {
+            % Calculate row and col based on the counter \i
+            \pgfmathsetmacro{\row}{int((\i-1)/(\nimages/\nrows))}
+            \pgfmathsetmacro{\col}{int(mod(\i-1, \nimages/\nrows))}
+            
+            % Use \imgname inside the node
+            \node[inner sep=0pt] at (\col*\spacing\textwidth, -\row*\spacing\textwidth) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+          }
+    \end{tikzpicture}
+    \caption{Time-Frequency Images for Sensor Group 1 (Local Motor Control). This group fuses Waist Acceleration (central body motion) and Averaged EMG (muscle drive) over a 5-second window to capture instantaneous physical effort.}
+    \label{fig:sensor_group_1}
+\end{figure}
+
+
+
+
+
+\textbf{Sensor Group 2}: Lower Limb Kinematics (Legs\_IMU) focuses exclusively on the biomechanical motion of the legs during the exact 5 second window. This group includes 3 axis acceleration data from bilateral ankle and foot mounted APDM IMUs, each sampled at 128 Hz. We process these by computing magnitude for each sensor location (left ankle, right ankle, left foot, right foot) and then averaging across all four locations to create an aggregate leg magnitude signal as follow:
+\begin{align}
+	\text{leg}_\text{mag}(t) = \text{mean}(\text{mag}_\text{L-ankle}, \text{mag}_\text{R-ankle}, \text{mag}_\text{L-foot}, \text{mag}_\text{R-foot}) \label{eq:legmag}
+\end{align} 
+This group is kept separate from Sensor Group 1 because leg acceleration exhibits fundamentally different biomechanical patterns than waist acceleration. While waist acceleration captures overall trunk motion and is relatively complex and aperiodic, leg acceleration exhibits highly periodic patterns at the stride frequency (typically 1 to 2 Hz for walking and 2 to 3 Hz for running) (Ingraham et al., 2019)\cite{ingraham2019evaluating}. During locomotion, the legs move in coordinated cycles, and this cyclic pattern is encoded directly in the leg acceleration signal. By isolating leg acceleration in a separate group, the model can learn to recognize gait patterns and relate stride frequency directly to energy expenditure. Research has shown that at the same walking speed, faster cadence (higher stride frequency) has different biomechanical efficiency and energy cost than slower cadence (lower stride frequency), and this distinction is encoded in the leg acceleration periodic patterns(Minetti et al., 1995)\cite{minetti1995effects}. Visual examples of their spectral transformations are shown in Figure \ref{fig:sensor_group_2}.
+
+\begin{figure}[ht]
+    \centering
+    \pgfmathsetmacro{\nimages}{6}
+    \pgfmathsetmacro{\nrows}{1}
+    \pgfmathsetmacro{\imgwidth}{0.12}
+    \pgfmathsetmacro{\spacing}{0.15}
+    \begin{tikzpicture}
+        
+        
+        % Iterate through the specific filenames. 
+        % count=\i allows us to keep your grid coordinate logic.
+        \foreach \imgname [count=\i] in {
+            Sensor2/Subject01_Incline_win00103_view2.png,
+            Sensor2/Subject01_Incline_win00104_view2.png,
+            Sensor2/Subject01_Incline_win00105_view2.png,
+            Sensor2/Subject01_Incline_win00106_view2.png,
+            Sensor2/Subject01_Incline_win00107_view2.png,
+            Sensor2/Subject01_Incline_win00108_view2.png                        
+        } {
+            % Calculate row and col based on the counter \i
+            \pgfmathsetmacro{\row}{int((\i-1)/(\nimages/\nrows))}
+            \pgfmathsetmacro{\col}{int(mod(\i-1, \nimages/\nrows))}
+            
+            % Use \imgname inside the node
+            \node[inner sep=0pt] at (\col*\spacing\textwidth, -\row*\spacing\textwidth) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+        }
+    \end{tikzpicture}
+    \caption{Time-Frequency Images for Sensor Group 2 (Legs\_IMU). This group aggregates acceleration from the ankles and feet to capture periodic gait cycles over a 5-second window.}
+    \label{fig:sensor_group_2}
+\end{figure}
+
+\textbf{Sensor Group 3}: Wrist Physiology (Wrist\_Physio) represents upper limit motion and autonomic nervous system activation during the exact 5 second window. This group combines two distinct types of signals. Empatica bilateral wrist acceleration is sampled at 32 Hz from left and right wrist worn devices and processed by computing magnitude for each wrist and then averaging bilaterally:
+\begin{align}
+	\text{wrist}_\text{mag}(t) = \text{mean}(\text{mag}_\text{L-wrist}, \text{mag}_\text{R-wrist}) \label{eq:wristmag}
+\end{align} 
+
+Empatica physio captures skin conductance (electrodermal activity) at bilateral wrists, sampled at 4 Hz, which we average across bilateral measurements:
+
+\begin{align}
+	\text{EDA}_\text{avg}(t) = \text{mean}(\text{EDA}_\text{L-wrist}, \text{EDA}_\text{R-wrist}) \label{eq:edaavg}
+\end{align}
+
+We include these signals together because both respond to overall activity intensity and provide information about upper body engagement and autonomic arousal (Candia-Rivera et al., 2022)\cite{candia2022confounding}. Wrist acceleration reflects voluntary arm motion patterns, which differ significantly by activity type (vigorous arm swing during walking, minimal arm swing during cycling, and no arm swing during stair climbing), so wrist acceleration helps the model distinguish between activity types. Electrodermal activity increases during intense exercise and correlates with thermal stress and sympathetic nervous system activation (Candia-Rivera et al., 2022)\cite{candia2022confounding}, complementing the mechanical information from wrist acceleration. Together, they provide a window into both conscious motor control (arm swing patterns) and involuntary physiological responses (sympathetic activation) in the upper body and extremities.\\
+
+\textbf{Sensor Group 4}: Systemic Metabolic Response (Metabolic) represents the integrated systemic physiological response to sustained activity using the extended 360s temporal context. This group extracts three signals from the Metabolics System data recorded at 4 Hz, which are heart rate in beats per minute, breath frequency in breaths per minute, and minute ventilation in liters per minute. The signals are extracted over a 360s context window centered on the primary window. These three measurements are included together because they all reflect systemic oxygen transport and utilization (Nobrega et al., 2014)\cite{nobrega2014neural}. Heart rate reflects cardiovascular demand and oxygen delivery capacity. Breath frequency reflects respiratory drive and oxygen uptake regulation. Minute ventilation, which is the product of breath frequency and tidal volume (breathing depth), provides an integrated measure of total respiratory effort. Research on heart rate variability and cardiorespiratory coupling demonstrates that heart rate, breathing rate, and ventilation are tightly coupled physiological responses to metabolic demand (Saul et al., 2021) \cite{SaulValenza2021HRVComplex}, with breathing typically preceding heart rate changes by approximately 15 to 30s  (Candia-Rivera et al., 2022)\cite{candia2022confounding}. Together, they characterize how the cardiovascular and respiratory systems are responding to the metabolic demands of the current activity.
+
+\begin{figure}[ht]
+    \centering
+    \pgfmathsetmacro{\nimages}{6}
+    \pgfmathsetmacro{\nrows}{1}
+    \pgfmathsetmacro{\imgwidth}{0.12}
+    \pgfmathsetmacro{\spacing}{0.15}
+    \begin{tikzpicture}
+        
+        
+        % Iterate through the specific filenames. 
+        % count=\i allows us to keep your grid coordinate logic.
+        \foreach \imgname [count=\i] in {
+            Sensor Group 4/Subject01_Cycling_win00604_view4.png,
+            Sensor Group 4/Subject01_Cycling_win00605_view4.png,
+            Sensor Group 4/Subject01_Cycling_win00606_view4.png,
+            Sensor Group 4/Subject01_Cycling_win00607_view4.png,
+            Sensor Group 4/Subject01_Cycling_win00608_view4.png,
+            Sensor Group 4/Subject01_Cycling_win00609_view4.png
+        } {
+            % Calculate row and col based on the counter \i
+            \pgfmathsetmacro{\row}{int((\i-1)/(\nimages/\nrows))}
+            \pgfmathsetmacro{\col}{int(mod(\i-1, \nimages/\nrows))}
+            
+            % Use \imgname inside the node
+            \node[inner sep=0pt] at (\col*\spacing\textwidth, -\row*\spacing\textwidth) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+        }
+    \end{tikzpicture}
+    \caption{Time-Frequency Images for Sensor Group 2 (Lower Limb Kinematics). This group aggregates acceleration from the ankles and feet to capture periodic gait cycles over a 5-second window.}
+    \label{fig:sensor_group_4}
+\end{figure}
+
+A critical design choice in this group is the intentional exclusion of VO2 and VCO2 measurements, despite these being available in the Metabolics System data. The ground truth energy expenditure label is computed directly from VO2 and VCO2 using the Brockway equation (EE in kJ per minute equals 16.58 times VO2 plus 4.15 times VCO2, where VO2 and VCO2 are in liters per minute) (Ingraham et al., 2019) \cite{ingraham2019evaluating}. If VO2 and VCO2 were included in this sensor group image, the model could directly read the label from the image during training, creating a form of information leakage where the model learns to recognize the label signal rather than learning genuine physiological relationships. This would produce artificially high training performance that would not generalize to test data. Instead, we use ventilatory proxies (heart rate, breathing frequency, minute ventilation) that strongly correlate with metabolic rate but do not directly encode the label. The model must learn the relationship between these proxies and the actual energy expenditure, rather than memorizing a direct mapping from label signals. The resulting time-frequency representations of these systemic proxies are illustrated in Figure \ref{fig:sensor_group_4}.
+
+\textbf{Signal Extraction}
+For each window defined in the source manifest (containing $window\_start\_s$, $window\_end\_s$)
+, the pipeline extracts signal segments using binary search over the time axis. Specifically, for mechanical signals (Sensor Groups 1, 2, 3), we extract from $window\_start\_s$, $window\_end\_s$
+. For metabolic signals (Sensor Group 4), we extract from $window_center_s$ minus 180 seconds to $window_center_s$ plus 180 seconds. Binary search (numpy.searchsorted) efficiently finds the exact time indices corresponding to these boundaries, ensuring precise temporal alignment across all sensors despite potentially different sampling rates. 
+
+\subsection{Single Signal Image Processing}
+While the multiview pipeline decomposes signals into anatomically and physiologically distinct groups, an alternative approach emphasizes strong individual signal modalities in isolation. The single signal image processing generates images from specific high impact physiological signals that have demonstrated strong predictive value for energy expenditure estimation (Ingraham et al., 2019). This approach is motivated by two key principles, first, while multimodal fusion can improve predictions by combining complementary information, individual strong signals often retain substantial predictive power on their own and second, understanding which individual signals are most predictive for energy expenditure estimation provides interpretability and insights into the relative importance of different physiological systems. 
+
+The single signal approach generates images from two major signal categories which are global systemic measurements from metabolic and autonomic sensors (heart rate, minute ventilation, breath frequency, oxygen saturation, electrodermal activity, and skin temperature) representing integrated physiological responses at the organism level, and electromyographic signals from bilateral lower limbs representing localized motor control. Each signal receives individual time-frequency processing with carefully chosen temporal windows—extended contexts for slow signals (360 seconds for metabolic, 180 seconds for Empatica Physio signals) and original rate processing for fast signals (5 seconds at 1000 Hz for EMG) to maximize information content within each image while respecting the fundamental frequency characteristics of each modality. The architectural implementation of this variable-context strategy, which adapts processing windows to the specific physiological dynamics of each sensor, is illustrated in Figure \ref{fig:global_emg_pipeline}.
+
+\definecolor{sourceColor}{RGB}{230, 240, 255}   % Blue
+\definecolor{descColor}{RGB}{235, 250, 235}     % Green
+\definecolor{imgPlaceColor}{RGB}{255, 255, 255} % White
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{% Resize to fit page width
+    \begin{tikzpicture}[
+        node distance=0.4cm,
+        font=\sffamily\scriptsize,
+        >=Stealth,
+        % --- STYLES ---
+        source/.style={
+            rectangle, 
+            draw=blue!50!black, 
+            thick, 
+            fill=blue!5, 
+            minimum width=2.2cm, 
+            minimum height=0.8cm, 
+            align=center, 
+            drop shadow,
+            rounded corners=3pt,
+            font=\bfseries\footnotesize
+        },
+        desc_node/.style={
+            rectangle, 
+            draw=green!40!black, 
+            thick, 
+            fill=green!5, 
+            minimum width=2.5cm, 
+            minimum height=0.5cm, 
+            align=center, 
+            drop shadow,
+            font=\scriptsize
+        },
+        img_placeholder/.style={
+            rectangle, 
+            draw=red!50!black, 
+            dashed, 
+            fill=white, 
+            minimum size=1.2cm, 
+            align=center, 
+            font=\tiny\color{gray}
+        },
+        arrow/.style={->, thick, color=gray!80!black}
+    ]
+
+        % ==========================================================
+        % 1. LEFT COLUMN: SOURCES
+        % ==========================================================
+        \node[source] (src_emg) {EMG Sensors\\(Legs)};
+        \node[source, below=3.0cm of src_emg] (src_emp) {Empatica E4\\(Wrists)};
+        \node[source, below=5.5cm of src_emp] (src_meta) {Metabolic Mask\\(Global)};
+
+        % ==========================================================
+        % 2. MIDDLE COLUMN: SIGNAL DESCRIPTION (Contexts from Code)
+        % ==========================================================
+        
+        % --- EMG (Fast Response: 5s) ---
+        \node[desc_node, right=2.0cm of src_emg, yshift=0.8cm] (d_emg_l) {EMG Left\\(5s Window)};
+        \node[desc_node, below=0.2cm of d_emg_l] (d_emg_r) {EMG Right\\(5s Window)};
+
+        % --- Empatica (Medium Response: 180s) ---
+        \node[desc_node, right=2.0cm of src_emp, yshift=2.0cm] (d_temp_l) {Temp Left\\(180s Context)};
+        \node[desc_node, below=0.2cm of d_temp_l] (d_temp_r) {Temp Right\\(180s Context)};
+        \node[desc_node, below=0.2cm of d_temp_r] (d_eda_l) {EDA Left\\(180s Context)};
+        \node[desc_node, below=0.2cm of d_eda_l] (d_eda_r) {EDA Right\\(180s Context)};
+
+        % --- Metabolics (Slow Response: 360s) ---
+        \node[desc_node, right=2.0cm of src_meta, yshift=2.0cm] (d_hr) {Heart Rate\\(360s Context)};
+        \node[desc_node, below=0.2cm of d_hr] (d_ve) {Minute Vent\\(360s Context)};
+        \node[desc_node, below=0.2cm of d_ve] (d_bf) {Breath Freq\\(360s Context)};
+        \node[desc_node, below=0.2cm of d_bf] (d_spo2) {SpO2\\(360s Context)};
+
+        % ==========================================================
+        % 3. RIGHT COLUMN: IMAGE PLACEHOLDERS
+        % ==========================================================
+        
+        % Spaced 2.0cm apart as requested
+        \node[img_placeholder, right=2.0cm of d_emg_l] (img_1)
+            {\includegraphics[width=1.6cm]{EMG_Left/Subject02_walking_EMG_LeftMag_00336.png}};
+        \node[img_placeholder, right=2.0cm of d_emg_r] (img_2) 
+            {\includegraphics[width=1.6cm]{EMG_Right/Subject02_walking_EMG_RightMag_00255.png}};
+        
+        \node[img_placeholder, right=2.0cm of d_temp_l] (img_3) 
+            {\includegraphics[width=1.6cm]{Temp_Left/Subject02_walking_Temp_Left_00323.png}};
+        \node[img_placeholder, right=2.0cm of d_temp_r] (img_4) 
+            {\includegraphics[width=1.6cm]{Temp_Right/Subject02_walking_Temp_Right_00300.png}};
+        \node[img_placeholder, right=2.0cm of d_eda_l] (img_5) 
+            {\includegraphics[width=1.6cm]{EDA_Left/Subject02_walking_EDA_Left_00323.png}};
+        \node[img_placeholder, right=2.0cm of d_eda_r] (img_6) 
+            {\includegraphics[width=1.6cm]{EDA_Right/Subject02_walking_EDA_Right_00175.png}};
+        
+        \node[img_placeholder, right=2.0cm of d_hr] (img_7) 
+            {\includegraphics[width=1.6cm]{heart_rate/Subject02_walking_HR_00320.png}};
+        \node[img_placeholder, right=2.0cm of d_ve] (img_8) 
+            {\includegraphics[width=1.6cm]{MinuteVent/Subject02_walking_MinuteVent_00266.png}};
+        \node[img_placeholder, right=2.0cm of d_bf] (img_9) 
+            {\includegraphics[width=1.6cm]{BreathFreq/Subject02_walking_BreathFreq_00185.png}};
+        \node[img_placeholder, right=2.0cm of d_spo2] (img_10) 
+           {\includegraphics[width=1.6cm]{OxygenSat/Subject02_walking_OxygenSat_00424.png}};
+        % ==========================================================
+        % 4. CONNECTIONS
+        % ==========================================================
+
+        % Source -> Desc
+        \draw[arrow] (src_emg.east) -- (d_emg_l.west);
+        \draw[arrow] (src_emg.east) -- (d_emg_r.west);
+
+        \draw[arrow] (src_emp.east) -- (d_temp_l.west);
+        \draw[arrow] (src_emp.east) -- (d_temp_r.west);
+        \draw[arrow] (src_emp.east) -- (d_eda_l.west);
+        \draw[arrow] (src_emp.east) -- (d_eda_r.west);
+
+        \draw[arrow] (src_meta.east) -- (d_hr.west);
+        \draw[arrow] (src_meta.east) -- (d_ve.west);
+        \draw[arrow] (src_meta.east) -- (d_bf.west);
+        \draw[arrow] (src_meta.east) -- (d_spo2.west);
+
+        % Desc -> Image
+        \draw[arrow] (d_emg_l) -- (img_1);
+        \draw[arrow] (d_emg_r) -- (img_2);
+        \draw[arrow] (d_temp_l) -- (img_3);
+        \draw[arrow] (d_temp_r) -- (img_4);
+        \draw[arrow] (d_eda_l) -- (img_5);
+        \draw[arrow] (d_eda_r) -- (img_6);
+        \draw[arrow] (d_hr) -- (img_7);
+        \draw[arrow] (d_ve) -- (img_8);
+        \draw[arrow] (d_bf) -- (img_9);
+        \draw[arrow] (d_spo2) -- (img_10);
+
+        % ==========================================================
+        % 5. HEADERS
+        % ==========================================================
+        \node[above=0.2cm of src_emg, font=\bfseries, color=blue!40!black] {Hardware};
+        \node[above=0.2cm of d_emg_l, font=\bfseries, color=green!40!black] {Signal \& Context};
+        \node[above=0.2cm of img_1, font=\bfseries, color=red!40!black] {Generated RGB Image};
+
+        % Vertical processing text
+        \node[align=center, font=\tiny\itshape, color=gray, rotate=90] at ($(d_eda_r)!0.5!(img_6)$) {Signal $\to$ CWT/STFT/GADF $\to$ RGB};
+
+    \end{tikzpicture}
+    } % End resizebox
+    
+    \caption{\textbf{The Single-Signal to Image Generation Pipeline.} This architecture systematically decomposes physiological data from three hardware sources into ten distinct image representations. To account for varying physiological response latencies, signals are processed using hierarchical temporal contexts: \textbf{(1)} Fast-response motor signals (EMG) are windowed at 5 seconds; \textbf{(2)} Autonomic signals (Skin Temperature, EDA) utilize a 180-second context to capture phasic and tonic shifts; and \textbf{(3)} Systemic metabolic signals (Heart Rate, Ventilation, Breath Frequency, SpO2) are processed with a 360-second window to reflect slow physiological trends. Each signal window is individually transformed into a 3-channel RGB image (combining CWT, STFT, and GADF), creating a standardized visual input for the foundation model.}
+    \label{fig:global_emg_pipeline}    
+\end{figure}
+
+Signal segments are extracted around each window center specified in the source manifest, with context window durations selected based on signal frequency characteristics and physiological dynamics. The temporal window selection reflects fundamental principles in signal analysis: slow signals with limited temporal resolution require extended context windows to capture meaningful variation, while fast signals require native sampling to preserve high-frequency content.
+
+For \textbf{Metabolic System} Signals (heart rate, minute ventilation, breath frequency, oxygen saturation), an extended context window of 360s is used because metabolic signals exhibit slow response dynamics with time constants of 20 to 60 seconds and provide limited temporal resolution. To overcome the irregularity of the native breath-by-breath sampling which operates at approximately 4 Hz, these extracted raw segments are subsequently resampled to a fixed length of 256 points using linear interpolation, as defined in the pipeline configuration ($RESAMPLE\_LEN = 256$). This resampling step is critical as it standardizes the input vector density for the time-frequency transformations (Continuous Wavelet Transform, Short-Time Fourier Transform, and Gramian Angular Difference Field), ensuring that the resulting distinct images for Heart Rate, Ventilation, Breathing Frequency, and Oxygen Saturation contain consistent spectral features regardless of variations in the subject's breathing rate (Figure \ref{fig:metabolic_system_grid}).
+
+\begin{figure}[htbp]
+    \centering
+    % --- Adjust these values to fit your page ---
+    \pgfmathsetmacro{\imgwidth}{0.13}    % Image width
+    \pgfmathsetmacro{\hspacing}{0.14}    % Horizontal spacing
+    \pgfmathsetmacro{\vspacing}{0.16}    % Vertical spacing
+
+    \begin{tikzpicture}
+
+        % =========================================================
+        % ROW 1: HEART RATE (HR)
+        % =========================================================
+        \node[anchor=east, font=\sffamily\scriptsize\bfseries] at (-0.5, -1*\vspacing\textwidth) {Heart Rate};
+        
+        % PASTE YOUR HR FILES HERE (separated by commas):
+        \foreach \imgname [count=\c] in {
+            heart_rate/Subject02_walking_HR_00320.png,
+            heart_rate/Subject02_walking_HR_00321.png,
+            heart_rate/Subject02_walking_HR_00322.png,
+            heart_rate/Subject02_walking_HR_00323.png,
+            heart_rate/Subject02_walking_HR_00324.png,
+            heart_rate/Subject02_walking_HR_00325.png
+        } {
+             \node[inner sep=0pt] at ({(\c-1)*\hspacing\textwidth}, {-1*\vspacing\textwidth}) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+        }
+
+        % =========================================================
+        % ROW 2: MINUTE VENTILATION (MV)
+        % =========================================================
+        \node[anchor=east, font=\sffamily\scriptsize\bfseries] at (-0.5, -2*\vspacing\textwidth) {Minute Vent};
+        
+        % PASTE YOUR MV FILES HERE:
+        \foreach \imgname [count=\c] in {
+            MinuteVent/Subject02_walking_MinuteVent_00266.png,
+            MinuteVent/Subject02_walking_MinuteVent_00266.png,
+            MinuteVent/Subject02_walking_MinuteVent_00266.png,
+            MinuteVent/Subject02_walking_MinuteVent_00266.png,
+            MinuteVent/Subject02_walking_MinuteVent_00266.png,
+            MinuteVent/Subject02_walking_MinuteVent_00266.png
+        } {
+             \node[inner sep=0pt] at ({(\c-1)*\hspacing\textwidth}, {-2*\vspacing\textwidth}) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+        }
+
+        % =========================================================
+        % ROW 3: BREATH FREQUENCY (BF)
+        % =========================================================
+        \node[anchor=east, font=\sffamily\scriptsize\bfseries] at (-0.5, -3*\vspacing\textwidth) {Breath Freq};
+        
+        % PASTE YOUR BF FILES HERE:
+        \foreach \imgname [count=\c] in {
+            BreathFreq/Subject02_walking_BreathFreq_00185.png,
+            BreathFreq/Subject02_walking_BreathFreq_00186.png,
+            BreathFreq/Subject02_walking_BreathFreq_00187.png,
+            BreathFreq/Subject02_walking_BreathFreq_00188.png,
+            BreathFreq/Subject02_walking_BreathFreq_00189.png,
+            BreathFreq/Subject02_walking_BreathFreq_00190.png
+        } {
+             \node[inner sep=0pt] at ({(\c-1)*\hspacing\textwidth}, {-3*\vspacing\textwidth}) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+        }
+
+        % =========================================================
+        % ROW 4: OXYGEN SATURATION (SpO2)
+        % =========================================================
+        \node[anchor=east, font=\sffamily\scriptsize\bfseries] at (-0.5, -4*\vspacing\textwidth) {Oxygen Sat};
+        
+        % PASTE YOUR SpO2 FILES HERE:
+        \foreach \imgname [count=\c] in {
+            OxygenSat/Subject02_walking_OxygenSat_00424.png,
+            OxygenSat/Subject02_walking_OxygenSat_00425.png,
+            OxygenSat/Subject02_walking_OxygenSat_00426.png,
+            OxygenSat/Subject02_walking_OxygenSat_00427.png,
+            OxygenSat/Subject02_walking_OxygenSat_00428.png,
+            OxygenSat/Subject02_walking_OxygenSat_00429.png
+        } {
+             \node[inner sep=0pt] at ({(\c-1)*\hspacing\textwidth}, {-4*\vspacing\textwidth}) {
+                \includegraphics[width=\imgwidth\textwidth]{\imgname}
+            };
+        }
+
+    \end{tikzpicture}
+    
+    \caption{\textbf{Time-Frequency Images of Metabolic System Signals.} This grid displays the four distinct single-channel inputs derived from the metabolic analysis system. The rows correspond to (from top to bottom): Heart Rate, Minute Ventilation, Breath Frequency, and Oxygen Saturation.}
+    \label{fig:metabolic_system_grid}
+\end{figure}
+
+For \textbf{Empatica Physio}, Skin Temperature and Electrodermal Activity, both signals employ a 180-second context window because they share the same 4 Hz sampling rate from the Empatica E4 wristband. Standardizing the context window duration across signals with identical sampling rates ensures consistent temporal resolution and simplifies signal processing. Skin temperature exhibits very slow drift dynamics changing over minutes as metabolic heat accumulates or dissipates through thermoregulatory sweating and vasodilation, while electrodermal activity responds to phasic arousal events over seconds to tens of seconds. Despite their different physiological response characteristics, the unified 180-second context window is appropriate for both modalities given their shared sampling rate. The 180-second context window captures temperature trends at a timescale relevant to sustained physical activity bouts, reflecting the slow thermal dynamics of the human body during exercise. For EDA, the same 180-second window provides adequate context to capture individual phasic events and their recovery dynamics, allowing the foundation model to distinguish transient autonomic responses within the broader temporal context of activity.
+
+For \textbf{EMG} Signals, only the primary 5 second window is extracted at native 1000 Hz sampling rate without extended context. EMG exhibits high frequency content reflecting transient motor recruitment events and the fine structure of muscle activation patterns. Native sampling is essential to preserve the high frequency information that characterizes instantaneous motor control and muscle activation timing. Extended context windows would add no additional information for EMG while increasing computational burden.
+
+The extraction procedure uses efficient time-based indexing to locate signal segments corresponding to window boundaries. For each signal type, the extraction identifies all data points falling within the specified temporal bounds and returns them with associated timing information. This approach is robust to varying sample spacing and ensures consistent data retrieval across different sensor types with different native sampling rates.
+
+Metabolics and Empatica signals originally processed at 360s and 180s respectively are resampled to a fixed length using linear interpolation, creating standardized input for downstream time frequency transforms. The resampling process creates a uniformly spaced time grid spanning the full context window duration, then interpolates the extracted signal values onto this grid. The resampling procedure computes an effective sampling frequency based on the context window duration and target resampling length. This effective sampling frequency is used during time frequency transform computation to properly scale frequency axes and ensure correct interpretation of time frequency content. The effective sampling rate provides appropriate frequency resolution for the signal's characteristic frequency content: very slow sampling rates for metabolic signals (which contain information primarily below 1 Hz) and slightly higher sampling rates for autonomic signals (which exhibit faster phasic dynamics).
+
+\subsection{Signal Quality}
+Before committing computational resources to time frequency transform generation, each signal segment is validated against quality criteria ensuring meaningful data will be transformed. Validation checks include length verification to ensure sufficient samples are available for reliable transform computation, and variance checking to ensure the signal carries meaningful variation rather than being flat or nearly constant. Flat signals indicate measurement failure, sensor disconnection, or data dropout and would produce uninformative images.
+
+Segments meeting all quality criteria proceed to transform generation and image creation, with their status recorded in the manifest. Segments failing any check are marked as skipped with the reason recorded. This quality filtering is essential for preventing erroneous training of foundation models on degenerate or uninformative images and ensures only superior quality signal representations enter the training pipeline.
+
+After generating three separate grayscale time frequency images (CWT, STFT, GAF), they are normalized independently and combined into a final three channel RGB image. Independent channel normalization ensures each transform's output uses the full dynamic range, preventing weak signals from being compressed into narrow ranges that might lose discriminative information. Each channel is scaled independently using min-max normalization to span the full 0 to 255 range.
+
+The three normalized channels are merged into a final three channel RGB image where CWT becomes the red channel, STFT becomes the green channel, and GAF becomes the blue channel. This channel assignment combines three complementary time frequency perspectives into a single multi channel representation suitable for input to foundation models. The three channel format leverages the rich color space of RGB images, allowing foundation models to treat the combined representation as a standard color image while actually encoding three independent time frequency transforms.
+
+\subsection{Image Manifest Organization}
+
+Images are organized in a hierarchical directory structure that facilitates systematic loading during model training. Within the output root, subdirectories group images by activity, and further subdivisions organize images by signal type. PNG files are saved with descriptive filenames encoding subject identifier, activity name, signal type, and window index.
+
+As images are generated, a CSV manifest file is created containing one row per window signal combination. The manifest records all columns from the source manifest (subject identifier, activity name, window indices, temporal boundaries, and ground truth labels) plus additional columns added by the pipeline (signal identifier, image filename if successfully generated, and processing status). This comprehensive manifest enables downstream training to easily locate images, filter low quality windows if desired, recover ground truth labels, analyze which signal types had quality issues, and reproduce the exact configuration of any trained model.
+
+Ground Truth Energy Expenditure Labels are inherited from the source manifest, populated with values directly from the Ingraham et al. dataset rather than being recomputed during image generation. Each generated image receives a single ground truth label corresponding to the 6-minute activity condition containing that image's window. Critically, the ground truth label remains constant across all windows and images within the same 6-minute activity condition, every window from the same activity receives the identical ground truth value. This creates a stair step label function where energy expenditure remains constant throughout each 6-minute condition and changes only at activity transitions. This design prevents spurious gradients from noisy per-breath calculations and ensures labels reflect the steady-state metabolic response of the entire activity condition rather than instantaneous fluctuations. The pipeline carries forward verified labels from the source manifest to enable supervised learning with authentic ground truth measurements from the original Ingraham dataset
+
+\section{Model Architecture}
+To estimate energy expenditure from the generated spectrotemporal images, we designed a unified deep learning framework that adapts pre-trained foundation models for continuous regression. The architecture follows a multiview late stage fusion design structured into three distinct stages: parallel feature extraction via Vision Transformer backbones, a robust fusion mechanism for aggregating sensor streams, and a specialized regression head for scalar prediction. The complete schematic of this architecture is illustrated in Figure \ref{fig:model_architecture}. This modular design allows us to systematically evaluate the efficacy of different preliminary training paradigm,s specifically contrastive learning versus autonomous supervision within a consistent regression framework.
+
+\textbf{Feature Extraction Backbones} The first stage of the pipeline employs parallel instances of a pretrained Vision Transformer (ViT) backbone (Dosovitskiy et al., 2020)\cite{dosovitskiy2021image} to independently process each valid sensor view. We investigate two distinct transfer learning paradigms, applying a consistent full fine-tuning strategy to both architectures to maximize domain adaptation.
+
+First, we utilize the CLIP $\text{ViT-B}/32$ image encoder (Radford et al., 2021) \cite{radford2021learning}, which was trained originally on 400 million text and image pairs using a contrastive objective. The ViT-B/32 architecture processes the 224 by 224 input image by dividing it into a grid of 32 by 32 pixel patches. These patches are flattened and projected into a sequence of embeddings, which are then processed by 12 transformer layers. For the CLIP pipeline, we employ a full fine-tuning strategy where the backbone weights are updated during training $(FREEZE\_CLIP=False)$. Unlike linear probing, which freezes the pre-trained weights, fine-tuning allows the model to adjust its internal representations—originally learned from internet-scale semantic concepts—to better capture the specific spectrotemporal features of physiological signals. The encoder outputs a 512-dimensional feature vector for each view.
+
+Second, we employ the DINOv2 backbone (Oquab et al., 2023) \cite{oquab2023dino}, specifically the ViT-S/14 variant, which utilizes a discriminative objective based on autonomous supervision to learn robust, object focused features without semantic labels. In contrast to CLIP, the DINOv2 backbone operates on finer 14 by 14 pixel patches, resulting in a denser feature map that captures higher frequency spatial details. Crucially, we employ a comprehensive fine tuning strategy for DINOv2, allowing the weights of the attention heads to update during training. This adaptation enables the backbone to shift from recognizing natural objects to quantifying the specific spectral textures of EMG and accelerometry scalograms. The encoder outputs a 384 dimensional feature vector for each view.
+
+\textbf{Masked Mean Fusion} To combine the information from multiple sensor inputs, we implemented a Mean Fusion mechanism, which acts as a global average pooling layer (Lin et al., 2013)\cite{lin2013network}. This layer is designed to be flexible, allowing the model to process any number of input images $(N)$ whether the setup uses 4 distinct sensor groups or expands to 8 separate signal views. The fusion layer works by calculating the average of the feature vectors from all N active views. This averaging step performs two critical functions:
+
+$1$. Standardization: It compresses the data from multiple views into a single global vector. This ensures the next stage of the model always receives the same input size, regardless of whether we are training with 4, 8, or more images.
+
+$2$. Balanced Integration: By taking the average, the model gives equal weight to every input stream. This prevents any single strong signal (like high-intensity acceleration) from overpowering subtle physiological signals (like heart rate trends) before the final prediction.
+
+This flexible design also allows us to run ablation studies. For example, when we test the model with a single signal $(N=1)$, this layer simply passes the single feature vector directly to the next stage without changing it. This ensures strict consistency across all our experiments.
+
+\textbf{Regression Head and Residual Learning} The global feature vector is passed to the Energy Estimation Head, a multilayer perceptron designed to map the visual embeddings to energy expenditure values. The head is composed of three specific functional layers. The first dense layer performs a linear projection of the fused feature vector to a hidden dimension of 512. This compression step forces the model to distill the most relevant metabolic features from the high dimensional visual embeddings. Next, we apply a Rectified Linear Unit activation function (Nair $\&$ Hinton, 2010) \cite{nair2010rectified} to introduce nonlinearity into the regression. Energy expenditure involves complex, nonlinear physiological interactions for example, the metabolic cost of movement increases exponentially with speed, not linearly. The ReLU layer enables the network to model these nonlinear relationships. Finally, a dropout layer with a probability of 0.2 is applied, which randomly zeros out $20\%$ of the neurons during each training pass (Srivastava et al., 2014) \cite{srivastava2014dropout}. This acts as a regularization mechanism, preventing the model from over relying on any single feature and forcing it to learn redundant, robust patterns across multiple sensors.
+
+
+
+
+
+
+
+\begin{figure}[ht]
+    \centering
+    % --- Define Academic Colors ---
+    \definecolor{inputColor}{RGB}{235, 242, 250}     % Soft Blue
+    \definecolor{backboneColor}{RGB}{250, 235, 235}  % Soft Red
+    \definecolor{fusionColor}{RGB}{235, 250, 235}    % Soft Green
+    \definecolor{headColor}{RGB}{255, 248, 230}      % Soft Orange
+    \definecolor{outputColor}{RGB}{245, 240, 255}    % Soft Purple
+
+    \resizebox{\textwidth}{!}{% Resize to fit page width
+    \begin{tikzpicture}[
+        node distance=1.0cm,
+        font=\sffamily\small,
+        >=Stealth,
+        % --- NODE STYLES ---
+        img/.style={
+            rectangle, 
+            draw=blue!40!black, 
+            thick, 
+            fill=inputColor, 
+            minimum width=2.0cm, 
+            minimum height=1.4cm, 
+            align=center, 
+            drop shadow,
+            rounded corners=3pt,
+            font=\bfseries
+        },
+        encoder/.style={
+            trapezium, 
+            trapezium angle=70, 
+            draw=red!40!black, 
+            thick, 
+            fill=backboneColor, 
+            minimum height=1.2cm, 
+            minimum width=2.2cm,
+            align=center, 
+            shape border rotate=270, 
+            drop shadow,
+            font=\small
+        },
+        fusion/.style={
+            circle, 
+            draw=green!40!black, 
+            thick, 
+            fill=fusionColor, 
+            minimum size=2.2cm, 
+            align=center, 
+            drop shadow,
+            font=\bfseries
+        },
+        layer/.style={
+            rectangle, 
+            draw=orange!50!black, 
+            thick, 
+            fill=headColor, 
+            minimum width=3.5cm, 
+            minimum height=0.8cm, 
+            align=center, 
+            rounded corners=2pt,
+            drop shadow,
+            font=\footnotesize
+        },
+        % --- ANNOTATION STYLES ---
+        groupbox/.style={
+            draw=gray!50, 
+            dashed, 
+            inner sep=10pt, 
+            rounded corners=5pt,
+            fill=white,
+            fill opacity=0.4
+        },
+        arrow/.style={->, very thick, color=gray!70!black}
+    ]
+
+        % ==========================================================
+        % 1. TOP ROW: INPUT IMAGE REPRESENTATIONS
+        % ==========================================================
+        
+        % Center Image
+        \node[img] (img2) {Image 2\\(Legs)};
+        
+        % Left Image
+        \node[img, left=0.6cm of img2] (img1) {Image 1\\(Core)};
+        
+        % Right Image
+        \node[img, right=1.8cm of img2] (imgn) {Image $N$\\(Signal $N$)};
+        
+        % Ellipsis
+        \node[right=0.4cm of img2, font=\Huge, color=gray!60] (dots) {$\dots$};
+        
+        % Label
+        \node[above=0.3cm of img2, font=\bfseries\large, color=blue!40!black] {Input Image Representations};
+
+        % ==========================================================
+        % 2. SECOND ROW: FEATURE EXTRACTION
+        % ==========================================================
+        
+        \node[encoder, below=1.2cm of img1] (enc1) {ViT Backbone};
+        \node[encoder, below=1.2cm of img2] (enc2) {ViT Backbone};
+        \node[encoder, below=1.2cm of imgn] (encn) {ViT Backbone};
+        
+        \node[right=0.7cm of enc2, font=\Huge, color=gray!60] {$\dots$};
+
+        % Connections
+        \draw[arrow] (img1) -- (enc1);
+        \draw[arrow] (img2) -- (enc2);
+        \draw[arrow] (imgn) -- (encn);
+        
+        % Feature Dimension labels
+        \node[right=0.1cm of enc1, font=\tiny, color=gray] {$D$};
+        \node[right=0.1cm of encn, font=\tiny, color=gray] {$D$};
+
+        % Shared Weights Box
+        \begin{scope}[on background layer]
+            \node[groupbox, fit=(enc1) (encn), label={[red!60!black, font=\footnotesize\bfseries]right:Shared Weights}] (enc_group) {};
+        \end{scope}
+
+        % ==========================================================
+        % 3. MIDDLE: FUSION LAYER
+        % ==========================================================
+        
+        \node[fusion, below=1.5cm of enc2] (fuse) {Masked\\Mean\\Fusion};
+        
+        % Connections
+        \draw[arrow] (enc1.south) -- (fuse);
+        \draw[arrow] (enc2.south) -- (fuse);
+        \draw[arrow] (encn.south) -- (fuse);
+
+        % ==========================================================
+        % 4. LOWER SECTION: REGRESSION HEAD
+        % ==========================================================
+        
+        % FC Layer 1
+        \node[layer, below=1.5cm of fuse] (fc1) {Linear Projection ($D \to 512$)};
+        
+        % Activation
+        \node[layer, below=0.5cm of fc1] (act) {ReLU + Dropout ($p=0.2$)};
+        
+        % FC Layer 2
+        \node[layer, below=0.5cm of act] (fc2) {Linear Projection ($512 \to 1$)};
+
+        % Connections
+        \draw[arrow] (fuse) -- node[right, font=\scriptsize, align=left] {Global Vector ($F_{global}$)} (fc1);
+        \draw[arrow] (fc1) -- (act);
+        \draw[arrow] (act) -- (fc2);
+
+        % Group Box for Head
+        \begin{scope}[on background layer]
+            \node[groupbox, fit=(fc1) (fc2), label={[orange!60!black, font=\small\bfseries, rotate=90, anchor=south]left:MLP Head}] (head_group) {};
+        \end{scope}
+
+        % ==========================================================
+        % 5. BOTTOM: DIRECT OUTPUT
+        % ==========================================================
+        
+        % Final Prediction
+        \node[rectangle, draw=black, ultra thick, fill=white, drop shadow, below=1.0cm of fc2, minimum width=2.5cm, minimum height=1.2cm, font=\bfseries\large] (final) {$\hat{y}_{EE}$};
+        
+        \node[right=0.2cm of final, font=\scriptsize, color=purple!50!black, align=left] {Predicted Energy\\(Regression)};
+        
+        % Connection
+        \draw[arrow] (fc2) -- (final);
+
+    \end{tikzpicture}
+    } % End resizebox
+
+    \caption{\textbf{The Unified Deep Learning Regression Framework.} The pipeline processes $1 to N$ input images (e.g., HR, EMG, MinuteVent) through parallel Vision Transformer backbones (DINOv2 or CLIP). Features are aggregated via a Mean Fusion layer to enforce balanced contributions from all sensors. The resulting global embedding ($F_{global}$) is mapped to energy expenditure ($W/kg$) via a nonlinear MLP head. This architecture is flexible, processing anywhere from a single signal ($N=1$) to multiple signal inputs ($N=8$) using shared weights.}
+    \label{fig:model_architecture}
+
+\end{figure}
+
+\chapter{Experiments and Results}
+
+This chapter reports the experimental evaluation of the image based biosignal pipeline for calorie expenditure estimation. The main objective is to understand two things under the same training and evaluation setup. First, how the prediction error changes depending on the signal choice (single signals and signal groups). Second, how the error changes depending on the vision backbone used for feature extraction (CLIP vs DINOv2). All results are reported using RMSE (W/kg).
+
+To measure generalization to unseen participants, we use a Leave One Subject Out (LOSO) evaluation protocol. In each fold, one subject is held out as the test subject and is not used during training. From the remaining subjects, a second subject is held out internally as a validation subject to monitor training progress and control model selection. This nested split ensures that the saved model is chosen based on performance on an unseen validation person, not only on training windows. After training, the final RMSE is computed on the held out test subject, and results are aggregated over the LOSO folds.
+
+\section{Single Signals Comparison}
+\subsection{Signal Specific Performance}
+
+We first evaluate the pipeline using single signal inputs to understand which physiological channels are most informative for calorie expenditure estimation. Figure \ref{single_signal_rmse} compares the global RMSE of ten signals using CLIP and DINOv2 as feature extractors.
+
+A clear separation appears between strong, medium, and weak signals. The strongest performance is achieved by electrodermal activity and EMG signals. The best individual signal is EDA\_Left, with RMSE 0.936 W/kg (DINOv2) and 0.962 W/kg (CLIP). EMG\_Left performs similarly well, reaching 0.940 W/kg (DINOv2) and 0.938 W/kg (CLIP). These results show that both backbones can learn useful representations when the signal contains consistent structure that correlates with physical effort.
+
+A second group of signals performs in a close range slightly above the best signals. EMG\_Right stays near the left side performance with 0.993 W/kg (DINOv2) and 0.998 W/kg (CLIP), indicating that both sides provide comparable predictive value. Skin temperature also stays close to 1.0 W/kg, with Temp\_Left = 1.009 (DINOv2) vs 0.982 (CLIP) and Temp\_Right = 1.020 (DINOv2) vs 0.994 (CLIP). Heart rate achieves 1.037 (DINOv2) and 1.013 (CLIP), while minute ventilation reaches 1.094 (DINOv2) and 1.028 (CLIP).
+
+The weakest performance in this single signal comparison is observed for breath frequency and oxygen saturation, which produce substantially higher errors than the other channels. Breath frequency reaches 2.798 W/kg (DINOv2) and 3.033 W/kg (CLIP), while oxygen saturation reaches 3.088 W/kg (DINOv2) and 3.157 W/kg (CLIP). This confirms that not every physiological channel provides equally learnable information for this task under the current windowing and representation settings.
+
+Overall, Figure \ref{single_signal_rmse} shows that signal selection strongly affects the achievable error. The difference between the best and worst signals is large, and this gap remains visible for both backbones.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{horizontal_signal_heatmap.png}
+	\caption{Signal-Specific Performance Comparison. This chart displays the Root Mean Square Error (RMSE) in W/kg for ten physiological signals. It compares the energy expenditure estimation accuracy achieved by the DINOv2 and CLIP backbones for each individual sensor modality.}
+	\label{single_signal_rmse}
+\end{figure}
+
+\subsection{Activity Specific Performance}
+We next analyze how prediction error changes across activities, because energy expenditure patterns differ between low intensity and high intensity motion. Figure \ref{activity_rmse} reports RMSE values stratified by activity type.
+
+Low intensity activities show the lowest errors across signals. For example, during walking backwards, EDA\_Left reaches 0.491 W/kg (DINOv2) and 0.568 W/kg (CLIP). In the same low intensity regime, EMG\_Left also performs strongly, including a low value of 0.465 W/kg with CLIP during walking backwards. These results indicate that stable and steady movement patterns are easier for the model to map to energy expenditure when the signal contains informative patterns.
+
+As activity intensity increases, errors generally increase for most signals. During running, even the best single signals degrade. In Figure \ref{activity_rmse}, the best single signals (such as EDA\_Left and EMG\_Left) exceed 1.28 W/kg during running. Similarly, inclined walking and stair climbing are more challenging than steady low intensity activities. In the reported results, incline reaches roughly 0.917–1.113 W/kg even for the best signals, and stair climbing exceeds 1.058 W/kg for the best signals.
+
+A consistent observation across the activity breakdown is that the relative ranking between signal types stays similar. Signals that are strong globally (EDA and EMG) remain strong across activities, and the weakest signals (breath frequency and oxygen saturation) remain poor across activities. The main change with intensity is that all signals lose some accuracy as the activity becomes more demanding.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{consolidated_activity_rmse.png}
+	\caption{Activity-Specific Performance Comparison. This chart displays the Root Mean Square Error (RMSE) in W/kg stratified by activity type. It compares the predictive accuracy of the DINOv2 and CLIP backbones across six distinct physical activities, ranging from low-intensity tasks like walking backwards to high-intensity exercises like running.}
+	\label{activity_rmse}
+\end{figure}
+
+\subsection{Model Specific Performance}
+
+Figure \ref{single_signal_rmse} also allows a direct comparison between the two feature extraction backbones. The main point is that the advantage is not constant. It changes depending on which signal is used.
+
+For electrodermal activity, DINOv2 performs slightly better. For EDA\_Left, DINOv2 improves from 0.962 to 0.936 W/kg (about a 2.7\% difference). A similar pattern is visible for EDA\_Right, where DINOv2 achieves 1.034 W/kg compared to 1.075 W/kg with CLIP.
+
+For some slower changing scalar signals, CLIP is slightly better. For example, CLIP performs better on temperature channels: Temp\_Left improves from 1.009 (DINOv2) to 0.982 (CLIP). A similar trend appears in minute ventilation, with 1.094 (DINOv2) vs 1.028 (CLIP).
+
+For breath frequency and oxygen saturation, both models perform poorly, and the difference between them is small compared to the overall error magnitude. Breath frequency is 2.798 (DINOv2) vs 3.033 (CLIP), and oxygen saturation is 3.088 (DINOv2) vs 3.157 (CLIP). This suggests that the limitation here is mainly related to the signal input quality for this task, rather than a specific weakness of one backbone.
+
+\subsection{Subject Specific Performance}
+
+To understand robustness across individuals, we report subject wise RMSE distributions (Figure \ref{subject_rmse}). The results show strong inter subject variability, meaning that some subjects are consistently easier to predict than others under the same pipeline.
+
+For signals that perform well globally, such as EDA, the subject wise performance is relatively stable. For EDA\_Left, RMSE ranges from 0.43 W/kg (Subject 06) up to 1.75 W/kg (Subject 01) with DINOv2, and from 0.47 W/kg up to 1.66 W/kg with CLIP. While the spread is visible, the signal remains within a relatively controlled range compared to weak signals.
+
+EMG signals show larger subject variation. For EMG\_Left, the reported range goes from 0.47 W/kg (Subject 09) up to 1.81 W/kg (Subject 01) with CLIP, and from 0.47 W/kg up to 1.74 W/kg with DINOv2. This indicates that EMG can be highly informative, but performance can shift more depending on subject specific conditions.
+
+Across subjects, the relative advantage between CLIP and DINOv2 is not fixed. Some subjects benefit more from one backbone than the other, especially for signals that are less stable. For signals that are consistently structured (like EDA), both models behave more similarly across the subject set.
+
+\subsection{Key findings for Single Signal Performance}
+
+The single signal experiments show three consistent observations. First, EDA and EMG provide the lowest errors among the tested signals. Second, breath frequency and oxygen saturation produce the highest errors and remain difficult across activities and subjects. Third, the backbone comparison does not produce one universal winner. Instead, DINOv2 and CLIP show small, signal dependent advantages, while both follow the same overall signal ranking.
+
+Earlier regression studies identified minute ventilation as the best single signal (RMSE 0.87 W/kg) \cite{babakhani2025deep} because it directly measures oxygen consumption. Our results show minute ventilation at 1.028–1.094 W/kg, but worse than skin conductance (EDA) (0.936 W/kg) and muscle signals (EMG) (0.938–0.940 W/kg). This reversal suggests vision models exploit indirect physiological relationships rather than direct mechanistic causality. Rich, time-varying signals work better than sparse, mechanistically direct measurements.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{subject_wise_rmse_clean.png}
+	\caption{A comparison of Root Mean Square Error (RMSE) across ten participants. The plot displays the error distribution for CLIP and DINOv2 models, highlighting the variability in predictive accuracy attributable to individual subject differences and signal stability.}
+	\label{subject_rmse}
+\end{figure}
+
+\section{Group Signals Comparison}
+
+After the single signal study, we evaluate grouped sensor inputs to test whether combining modalities improves performance and robustness. The evaluated groups follow physiologically motivated combinations:
+
+1. Global\_Signals includes 8 channels (EDA left and right, skin temperature left and right, breath frequency, minute ventilation, heart rate, oxygen saturation) mentioned in Ingraham et al. \cite{ingraham2019evaluating}.
+
+2. Accel\_EMG combines waist acceleration with bilateral EMG.
+
+3. Legs\_IMU combines left and right ankle acceleration.
+
+4. Metabolic groups respiratory and oxygen related measures (breath frequency, oxygen saturation, minute ventilation).
+
+5, Four\_Sensor\_Groups (Full Body) represents the combined multi stream decomposition across the complementary groups.
+
+\subsection{Group Specific Performance}
+
+Figure \ref{heatmap_rmse_group} reports global RMSE for the five grouped inputs. The best global performance is achieved by Four\_Sensor\_Groups (Full Body) with 1.024 W/kg (DINOv2) and 1.025 W/kg (CLIP). Acce\_EMG performs very similarly with 1.037 (DINOv2) and 1.019 (CLIP), showing that mechanical and muscle activation signals already carry strong information for this task.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{group_heatmap.png}
+	\caption{Signal Groups specific Performance Comparison. This chart displays the Root Mean Square Error (RMSE) in W/kg for five sensor groups. It compares the energy expenditure estimation accuracy achieved by the DINOv2 and CLIP backbones for each aggregated sensor modality.}
+	\label{heatmap_rmse_group}
+\end{figure}
+
+The next group is Global\_Signals, which shows a large backbone gap: 1.175 (DINOv2) compared to 1.952 (CLIP). Legs\_IMU performs worse than the full body and Accel\_EMG groups, reaching 1.752 (DINOv2) and 1.677 (CLIP). Finally, the Metabolic group produces the highest errors with 2.484 (DINOv2) and 2.631 (CLIP), which aligns with the earlier single signal results where breath and oxygen related signals were consistently weak.
+
+\subsection{Activity Specific Performance of Signal Groups}
+Figure \ref{activity_rmse_group} breaks down grouped performance by activity. Here, the activity dependence is visible again, but groups behave differently depending on the activity type.
+
+In low intensity conditions such as backwards walking, the strongest groups produce low RMSE values. Accel\_EMG reaches 0.426 (DINOv2) and 0.470 (CLIP), while the Full Body (Four\_Sensor\_Groups) group reaches 0.495 (DINOv2) and 0.491 (CLIP). In the same activity, Metabolic remains high at 2.237 (DINOv2) and 2.228 (CLIP), showing that grouping slow respiratory signals does not remove the performance limitation.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{group_activity_plot.png}
+	\caption{Grouped Signals Performance per Activity. This chart displays the error rates (RMSE) for each sensor group separated by activity type. It highlights how physical intensity impacts prediction accuracy, with high-intensity tasks like Running resulting in higher errors compared to stable activities like Walking.}
+	\label{activity_rmse_group}
+\end{figure}
+
+In moderate intensity activities, performance stays relatively controlled for Full Body and Accel\_EMG. During cycling, Full Body reaches 0.983 (DINOv2) and 0.949 (CLIP), while Accel\_EMG reaches 0.985 (DINOv2) and 1.012 (CLIP). Walking shows a similar pattern, where Full Body remains low (0.602 DINOv2, 0.738 CLIP) and Accel\_EMG stays below 0.70 (0.692 DINOv2, 0.654 CLIP). In contrast, Legs\_IMU is more sensitive and is higher during walking (1.703 DINOv2, 1.509 CLIP), showing that gait only signals do not generalize equally well across all movement contexts.
+
+In high intensity activities, errors rise across all groups, but the amount differs strongly between groups. For running, Full Body reaches 1.419 (DINOv2) and 1.301 (CLIP), and Accel\_EMG reaches 1.544 (DINOv2) and 1.407 (CLIP). In comparison, Global\_Signals degrades sharply for CLIP (2.919) but stays lower for DINOv2 (1.605). Legs\_IMU becomes very high for running (2.369 DINOv2, 2.247 CLIP), and Metabolic reaches the highest errors (3.354 DINOv2, 3.828 CLIP). A similar pattern appears in incline, where Full Body and Accel\_EMG remain near 1.0, while Legs\_IMU and Metabolic remain substantially higher.
+
+Overall, the activity analysis shows that Full Body and Accel\_EMG are consistently the strongest groups across activities, while Metabolic remains the weakest across all intensities. Global\_Signals is highly backbone dependent, especially under higher intensity conditions.
+
+\subsection{Key Findings}
+
+Full-Body signal achieved 1.024 W/kg, matching best single signals (0.936 W/kg) despite vastly increased complexity. The consistency of Full-Body signal across all activities (0.49–1.42 W/kg range) confirms that the multi-signal decomposition creates a robust, activity-independent representation. Adapting temporal resolution to signal characteristics (5 seconds for mechanics, 360 seconds for metabolics) successfully handles the fundamental challenge of processing fast and slow signals together.
+
+DINOv2 and CLIP showed near-identical performance (< 1.7\% difference) on high-quality groups (Full-Body signal and Accel\_EMG), versus a dramatic 66\% performance gap on Global signals. This disparity reveals a fundamental architectural difference in how these models handle temporal signal structure.
+
+Full-Body signals demonstrated the most reliable cross-subject generalization, with inter-subject RMSE ranging from 0.436 W/kg (Subject 06) to 1.855 W/kg (Subject 01)—a 4.3-fold spread with tight clustering as shown in Figure \ref{subject_rmse_group} Accel\_EMG showed similar consistency (0.542–1.739 W/kg), confirming that mechanical signals represent a physiologically universal relationship. In contrast, Global signals exhibited extreme instability (0.630–2.437 W/kg with CLIP), with Subject 02 showing >100\% performance divergence between models.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{group_subject_wise_rmse.png}
+	\caption{Subject-Wise RMSE Distribution for Grouped Signals. This graph illustrates the range of estimation errors (RMSE) across ten different subjects. It visualizes the impact of individual differences on model performance, showing that while some subjects are easy to predict (e.g., Subject 06), others present a greater challenge (e.g., Subject 01).}
+	\label{subject_rmse_group}
+\end{figure}
+
+\section{Comparison Summary}
+
+The comparative analysis of the feature extraction backbones reveals distinct performance characteristics depending on the complexity and modality of the input signal. DINOv2 demonstrates superior efficacy in handling complex, multimodal integration tasks, achieving significantly lower error rates in high-level fusion categories such as Global Signals (1.175 vs 1.952) and Metabolic (2.484 vs 2.631) in Figure \ref{all_signals_rmse}. It also excels in capturing subtle autonomic variations, outperforming CLIP in Electrodermal Activity (EDA) and Breath Frequency. This suggests that DINOv2's self-supervised features are particularly robust for interpreting the non-linear physiological correlations required for systemic energy estimation.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=.3]{All_signals_rmse.png}
+	\caption{Comprehensive Performance Comparison (RMSE). This table presents the Root Mean Square Error (W/kg) for all evaluated single signals and sensor groups. It contrasts the predictive accuracy of the DINOv2 and CLIP backbones, with bold values indicating the superior model for each specific modality. The results demonstrate a performance trade-off: DINOv2 tends to excel in complex, high-level fusion tasks (e.g., Global Signals, Metabolic), while CLIP often achieves lower errors for specific scalar and mechanical metrics (e.g., Heart Rate, Legs\_IMU).}
+	\label{all_signals_rmse}
+\end{figure}
+
+When comparing backbones, the differences depend on the signal type and the fusion complexity. DINOv2 shows small advantages on EDA signals and a clear advantage for the Global\_Signals grouping, while CLIP shows small advantages for temperature and minute ventilation, and slightly better global performance for Accel\_EMG and Legs\_IMU. The Full Body grouping produces almost identical global RMSE for both backbones, indicating that for high quality multi stream groupings, the two pretrained encoders behave similarly under the current training setup.
+
+\chapter{Discussion and Conclusion}
+\section{Summary}
+This thesis studied calorie (energy expenditure) estimation from wearable biosignals using an image based pipeline. Instead of feeding raw 1D time series directly into a regression model, the signals are converted into 2D images using complementary transformations, and a pretrained vision backbone is used as a feature extractor. In the proposed setup, each window of a signal is represented as an RGB like image built from three channels (time frequency and temporal structure views). The image is then encoded by a foundation model, and a lightweight MLP regressor is trained to map the embedding to energy expenditure.
+
+The goal was not to introduce a new backbone architecture, but to run a systematic evaluation of whether pretrained vision representations can be useful for physiological signals, and how performance changes depending on (1) the selected signals and (2) the chosen vision encoder. The experiments were designed under subject independent evaluation so that the conclusions reflect generalization to unseen people rather than memorization of individuals.
+
+\section{Key findings}
+A consistent pattern across experiments is that signal choice matters as much as model choice. Signals with richer temporal structure and higher effective information content produced lower errors, while very slow or weakly varying signals remained difficult regardless of the backbone. In the single signal comparison, electrodermal activity and EMG based inputs achieved the strongest performance, while breath frequency and oxygen saturation produced the highest errors, indicating that not every physiological channel provides learnable structure for this task in the current dataset and preprocessing configuration. 
+
+When comparing pretrained vision backbones, the results showed that DINOv2 and CLIP behave differently depending on the modality and fusion difficulty. DINOv2 tended to be more robust when the input represents more complex multi-signal fusion categories, while CLIP had small advantages in more stable kinematic dominated cases. This suggests that the choice of the representation backbone should be aligned with the type of physiological dynamics the input carries, rather than assuming one model will dominate in all scenarios.
+
+\section{Limitations}
+The main limitation of this thesis is dataset scale, especially in the context of foundation models. The available data contains recordings from 10 subjects, which is enough to benchmark classical regressors and smaller deep models, but it is not enough to fully exploit the potential of very large pretrained encoders through fine tuning. In practice, this means the evaluation mostly tests transferability of representations rather than the true ceiling performance of foundation model adaptation. Any strong conclusions about “foundation models being better or worse” must therefore be interpreted under this constraint.
+
+A second limitation is the availability and suitability of pretrained models for bio-signal derived images. Most strong vision backbones are pretrained on natural image distributions, while there are very few pretrained models specifically trained on time–frequency images (such as CWT scalograms or STFT spectrograms) or correlation based encodings (such as GADF). Because of this mismatch, it is difficult to guarantee that the pretrained features are optimal for these representations. This affects the pipeline in two ways: first, feature extraction may not focus on the most meaningful physiological patterns, and second, the benefit of transfer learning may be limited unless the model is adapted with sufficient domain specific data. Therefore, a model performing weaker on spectrogram like inputs does not necessarily mean the representation is not useful, but it may indicate that the pretrained visual features are not aligned with the structure of bio-signal images.
+
+Finally, the subject independent results highlight strong inter individual variability. Even when a signal performs well on average, some subjects remain difficult due to physiological differences, sensor placement, noise, and varying activity execution. This limits reliability in real deployments unless personalization or calibration mechanisms are introduced.
+
+\section{Future Work}
+
+The most direct improvement is to evaluate on datasets with more subjects and more diverse conditions. With larger data, it becomes realistic to test controlled fine tuning strategies for the vision encoder (full fine tuning, partial unfreezing, or parameter efficient tuning) and measure whether adaptation improves generalization beyond what a frozen encoder plus MLP can achieve.
+
+While this thesis focused on CLIP based regression and compared against another strong vision encoder (DINOv2), the same pipeline should be tested with additional families of models. This includes self supervised vision models and other pretrained encoders, evaluated under identical preprocessing and splits, to understand whether the observed trends are model specific or general to vision foundation representations.
+
+The signal to image stage should be treated as a first class component, not a fixed preprocessing step. Future experiments should test alternative transformations and parameter settings, for example multi resolution time frequency images, different wavelet configurations for CWT, different STFT window settings, and other temporal structure encodings beyond the current Gramian approach. A useful goal is to build a small ablation matrix that shows which representation choices are robust across sensors and which ones are highly sensor dependent.
+
+Because inter subject variability is a dominant issue in wearable sensing, practical systems often benefit from lightweight personalization. Future work can evaluate subject adaptive layers, small calibration sets per new user, or domain adaptation methods that reduce the shift between people without requiring full retraining.
+
+\section{Conclusion}
+
+The results show that this approach is feasible and can achieve strong performance for several informative single signals and sensor groupings, while also showing clear failure cases for signals with weak structure or low variability. The experiments also indicate that backbone choice matters, but not as a single universal winner. Performance depends on the signal modality and how complex the input grouping is, meaning that model selection should be aligned with the signal setup.
+
+At the same time, the study highlights that strong conclusions about foundation model adaptation are limited by the dataset size. With only 10 subjects, the experiments mainly reflect transfer performance under limited subject diversity, and do not fully represent the potential of fine tuning large models. In addition, there are few pretrained models designed specifically for biosignal derived images such as spectrograms, scalograms, and GADF maps, which makes feature extraction less aligned with the input structure. Future work should therefore extend the evaluation to larger cohorts, test additional backbones, and explore more signal processing variations to improve robustness and generalization for real world calorie expenditure monitoring.
+
+%As shown in \cite{C2}, we present an equation
+%\begin{align}
+	%H(\omega) = \int h(t) \e{\im\omega t} \delta t \in \N
+%\end{align}
+
+%Then we include a graphic in figure \ref{mind} and information about captions in table \ref{captions}.\\
+%\begin{figure}
+%	\centering
+	%\includegraphics[scale=.3]{isslogocolor}
+	%\caption{A beautiful mind}
+	%\label{mind}
+%\end{figure}
+
+%\begin{table}
+   % \centering
+   % \caption{Where to put the caption}
+  %  \label{captions}
+   % \begin{tabular}{lcc}
+     %   \toprule
+     %    & above & below\\
+     %   \midrule
+      %  for figures & no & yes\\
+     %   for tables & yes & no\\
+    %    \bottomrule
+    %\end{tabular}
+%\end{table}
+
+
+
+\newpage
+\appendix
+\chapter{Additionally}
+You may do an appendix
+
+% -------------------> end writing here <------------------------
+% *****************************************************************
+% --- NEW: List of Abbreviations ---
+\chapter*{List of Abbreviations}     % Creates a heading without a number
+\addcontentsline{toc}{chapter}{List of Abbreviations} % Manually adds it to the Table of Contents-
+\begin{tabular}{@{}ll}                % Simple table for the list
+    \textbf{Abbr.} & \textbf{Description} \\ 
+    
+    EMG  & Electromyography \\
+    STFT & Short-Time Fourier Transform\\
+    GADF & Gramian Angular Difference Field \\
+    CWT & Continuous Wavelet Transform \\
+    CNN & Convolutional Neural Network \\
+    CLIP & Contrastive Language Image Pre training \\
+    DINOv2 & DIstillation with NO labels, version 2 \\
+    EE & Energy Expenditure \\
+    ANN & Artificial Neural Network \\
+    SVM & Support Vector Machine \\
+    LSTM & Long Short Term Memory \\
+    MSE & Mean Squared Error\\
+    RMSE & Root Mean Squared Error\\
+    MedSAM & Medical Segment Anything Model\\
+    LLaVA-Med & Large Language-and-Vision Assistant for Biomedicine\\
+    BERT & Bidirectional Encoder Representations from Transformers\\
+    ViT & Vision Transformer\\
+    RGB & Red, Green, Blue\\
+    
+    
+    
+\end{tabular}
+\newpage                              % Ensures List of Figures starts on a fresh page
+% ----------------------------------
+\listoffigures
+\listoftables
+
+\ifthenelse{\equal{\doclang}{german}}{
+	\bibliographystyle{IEEEtran_ISSger}
+}{
+	\bibliographystyle{IEEEtran_ISS}
+}
+\bibliography{refs}
+% --- Existing/Provided BibTeX ---
+
+
+
+% *****************************************************************
+%% Additional page with Declaration ("Eidesstattliche Erklrung");
+%% completed automatically
+\begin{titlepage}
+      \vfill
+      \LARGE \ifthenelse{\equal{\doclang}{german}}{\textbf{Erkl\"arung}}{\textbf{Declaration}}
+      \vfill
+
+      \ifthenelse{\equal{\doclang}{german}}{
+         Hiermit erkl\"are ich, dass ich diese Arbeit selbstst\"andig verfasst und keine anderen als die angegebenen
+         Quellen und Hilfsmittel benutzt habe.
+      }
+      {
+         Herewith, I declare that I have developed and written the enclosed thesis entirely by myself and that I have not used sources or means except those declared.
+      }
+
+      \vspace{1cm}
+
+      \ifthenelse{\equal{\doclang}{german}}{
+         Die Arbeit wurde bisher keiner anderen Pr\"ufungsbeh\"orde vorgelegt und auch noch nicht ver\"offentlicht.
+      }
+      {
+         This thesis has not been submitted to any other authority to achieve an academic grading and has not been published elsewhere.
+      }
+
+      \vfill
+
+      
+      Stuttgart, \signagedate
+      \hfill
+      \begin{tabular}{l}
+          \hline
+          \student
+      \end{tabular}
+\end{titlepage}
+
+
+
+\end{document}
