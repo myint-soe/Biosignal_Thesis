@@ -54,9 +54,9 @@ KEEP_COLS = [
     "ground_truth_value" 
 ]
 
-print(f"🚀 Multiview Pipeline (From Manifest) for {SUBJECT_ID}")
-print(f"   📂 Source Manifest: {SOURCE_MANIFEST_PATH}")
-print(f"   📂 Output Root:     {OUTPUT_ROOT}")
+print(f" Multiview Pipeline (From Manifest) for {SUBJECT_ID}")
+print(f"    Source Manifest: {SOURCE_MANIFEST_PATH}")
+print(f"    Output Root:     {OUTPUT_ROOT}")
 
 
 
@@ -349,7 +349,7 @@ if __name__ == "__main__":
         if not act_path:
             continue
 
-        print(f"\n📂 Activity: {activity}")
+        print(f"\n Activity: {activity}")
 
         # Load sensors
         acc_data = load_adm_accel(act_path)
@@ -425,7 +425,7 @@ if __name__ == "__main__":
                 
                 full_rows.append(out_row)
 
-        print(f"   ✅ Valid images for {activity}: {valid_count_activity}")
+        print(f"   Valid images for {activity}: {valid_count_activity}")
 
     # Save Manifest
     if full_rows:
@@ -440,6 +440,6 @@ if __name__ == "__main__":
         for act, s in stats.items():
             print(f"{act:<35} | {s['valid']:>8} | {s['skipped']:>12}")
         print("-" * 60)
-        print(f"🧮 TOTAL VALID IMAGES GENERATED: {total_valid_images}")
+        print(f" TOTAL VALID IMAGES GENERATED: {total_valid_images}")
     else:
         print("❌ No images generated.")
