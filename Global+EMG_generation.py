@@ -230,7 +230,7 @@ def load_emg(act_path):
 
 
 if __name__ == "__main__":
-    print(f"🚀 Starting V4 Pipeline for {SUBJECT_ID}...")
+    print(f"Starting V4 Pipeline for {SUBJECT_ID}...")
     
     # Load Source Manifest
     src = pd.read_csv(SOURCE_MANIFEST_PATH) if SOURCE_MANIFEST_PATH.endswith('.csv') else pd.read_excel(SOURCE_MANIFEST_PATH)
@@ -250,7 +250,7 @@ if __name__ == "__main__":
     # Locate Ground Truth Column
     gt_col = "gt_supervisor_Wkg"
     if gt_col not in src.columns:
-        print(f"⚠️ Warning: '{gt_col}' not found in source manifest. Looking for alternatives...")
+        print(f"Warning: '{gt_col}' not found in source manifest. Looking for alternatives...")
         possible_gts = ["label_EE_Wkg_net_6min", "ground_truth_value"]
         for p in possible_gts:
             if p in src.columns:
@@ -368,6 +368,6 @@ if __name__ == "__main__":
         df_out = df_out[OUTPUT_COLUMNS] 
         
         df_out.to_csv(OUTPUT_MANIFEST, index=False)
-        print(f"\n✅ Finished. Manifest: {OUTPUT_MANIFEST}")
+        print(f"\n Finished. Manifest: {OUTPUT_MANIFEST}")
         for act, s in stats.items():
             print(f"   {act}: {s['valid']} valid, {s['skipped']} skipped")
